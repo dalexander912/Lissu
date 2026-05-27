@@ -9,5 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="Lissu_Purple">#8000C8</color>
+    <color name="Lissu_LightPurple">#E1D5E7</color>
+    <color name="Lissu_DarkPurple">#352142</color>
 
 </resources>

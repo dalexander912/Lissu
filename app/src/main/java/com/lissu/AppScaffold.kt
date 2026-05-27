@@ -1,7 +1,9 @@
 package com.lissu
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,12 +17,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -31,6 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,9 +51,9 @@ fun AppScaffold(
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
   content: @Composable (PaddingValues) -> Unit
 ) {
-  val BLACK = colorResource(R.color.black)
-  val WHITE = colorResource(R.color.white)
   val PURPLE = colorResource(R.color.Lissu_Purple)
+  val LIGHT_PURPLE = colorResource(R.color.Lissu_LightPurple)
+  val DARK_PURPLE = colorResource(R.color.Lissu_DarkPurple)
 
   Scaffold(
     modifier = modifier.fillMaxSize(),
@@ -61,7 +63,7 @@ fun AppScaffold(
         TopAppBar(
           colors = topAppBarColors(
             containerColor = PURPLE,
-            titleContentColor = WHITE,
+            titleContentColor = Color.White,
           ),
           title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -80,7 +82,7 @@ fun AppScaffold(
               Icon(
                 Icons.Outlined.Notifications,
                 contentDescription = "Notificaciones",
-                tint = WHITE
+                tint = Color.White
               )
             }
           }
@@ -89,12 +91,12 @@ fun AppScaffold(
     },
     bottomBar = {
       BottomAppBar(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = BLACK,
+        containerColor = if(isSystemInDarkTheme()) DARK_PURPLE else LIGHT_PURPLE,
+        contentColor = if(isSystemInDarkTheme()) Color.White else Color.Black,
         actions = {
           Row(
             modifier = Modifier.fillMaxSize().padding(top = 8.dp, bottom = 8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceAround
           ) {
             BottomBarButton({  }, R.drawable.home, "Inicio")
             BottomBarButton({  }, R.drawable.add_list, "Agregar")
@@ -131,13 +133,16 @@ fun BottomBarButton(
     Image(
       painterResource(imageId),
       contentDescription = text,
-      modifier = Modifier.size(32.dp)
+      modifier = Modifier.size(28.dp),
+      colorFilter =
+        if(isSystemInDarkTheme()) ColorFilter.tint(Color.White) else null
     )
-    Text(text, fontSize = 12.sp)
+    Text(text, fontSize = 10.sp)
   }
 }
 
-@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light Mode")
 @Composable
 fun AppScaffoldPreview() {
   AppScaffold(title = "Usuario 1") {
