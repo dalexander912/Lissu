@@ -9,3 +9,9 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+// Lissu Colors //
+val Lissu_Purple = Color(0xFF8000C8)
+val Lissu_Purple2 = Color(0xFFA85BE0)
+val Lissu_LightPurple = Color(0xFFE1D5E7)
+val Lissu_DarkPurple = Color(0xFF352142)
