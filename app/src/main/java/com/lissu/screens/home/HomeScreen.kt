@@ -38,14 +38,17 @@ import com.lissu.ui.theme.Lissu_Purple2
 
 @Composable
 fun HomeScreen(
-  viewModel: HomeViewModel = viewModel()
+  viewModel: HomeViewModel = viewModel(),
+  onNavigateToAccountScreen: () -> Unit,
+
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists = emptyList<Any>()
 
   AppScaffold(
     title = "Usuario1",
-    currentScreen = Routes.Home
+    currentScreen = Routes.Home,
+    onNavigateToAccount = onNavigateToAccountScreen
   ) { innerPadding ->
     Column(
       modifier = Modifier.padding(innerPadding)
@@ -160,5 +163,5 @@ fun HomeScreen(
 //@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light Mode")
 @Composable
 fun HomePreview() {
-  HomeScreen()
+  HomeScreen( onNavigateToAccountScreen = {  })
 }

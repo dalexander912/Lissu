@@ -55,7 +55,15 @@ fun AppScaffold(
   currentScreen: Routes,
   navigationIcon: @Composable (() -> Unit)? = null,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+
+  onNavigateToHome: () -> Unit = {},
+  onNavigateToAddList: () -> Unit = {},
+  onNavigateToMaps: () -> Unit = {},
+  onNavigateToAccount: () -> Unit = {},
+
   content: @Composable (PaddingValues) -> Unit
+
+
 ) {
   val isDark = isSystemInDarkTheme()
 
@@ -102,13 +110,13 @@ fun AppScaffold(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
           ) {
-            BottomBarButton({  },
+            BottomBarButton(onNavigateToHome,
               R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
-            BottomBarButton({  },
+            BottomBarButton(onNavigateToAddList,
               R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
-            BottomBarButton({  },
+            BottomBarButton(onNavigateToMaps,
               R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
-            BottomBarButton({  },
+            BottomBarButton(onNavigateToAccount,
               R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
           }
         }

@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.lissu.screens.account.AccountScreen
 import com.lissu.screens.home.HomeScreen
 
 @Composable
@@ -19,7 +20,12 @@ fun Lissu(modifier: Modifier = Modifier) {
 
       }
       entry<Routes.Home> {
-        HomeScreen()
+        HomeScreen(
+          onNavigateToAccountScreen = {
+            //resultViewModel.fetchOptions()
+            backStack.add(Routes.Account)
+          }
+        )
       }
       entry<Routes.AddList> {
 
@@ -37,7 +43,9 @@ fun Lissu(modifier: Modifier = Modifier) {
 
       }
       entry<Routes.Account> {
-
+        AccountScreen(
+          onBack = { backStack.removeLastOrNull() }
+        )
       }
     }
   )
