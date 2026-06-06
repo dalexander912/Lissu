@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -53,6 +54,7 @@ fun AppScaffold(
   modifier: Modifier = Modifier,
   title: String = "",
   currentScreen: Routes,
+  onBack: (() -> Unit)? = null,
   navigationIcon: @Composable (() -> Unit)? = null,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 
@@ -88,7 +90,19 @@ fun AppScaffold(
               Text(title, fontWeight = FontWeight.Bold)
             }
           },
-          navigationIcon = { navigationIcon?.invoke() },
+          navigationIcon = {
+            if (navigationIcon != null) {
+              navigationIcon()
+            } else if (onBack != null) {
+              IconButton(onClick = onBack) {
+                Icon(
+                  Icons.AutoMirrored.Filled.ArrowBack,
+                  contentDescription = "Volver",
+                  tint = Color.White
+                )
+              }
+            }
+          },
           actions = {
             IconButton(onClick = {  }) {
               Icon(
