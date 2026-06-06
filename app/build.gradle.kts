@@ -20,6 +20,14 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+    externalNativeBuild {
+      cmake {
+        //alinear el código nativo a 16 KB
+        arguments ("-DANDROID_ALIGN_16KB=ON")
+      }
+    }
+
   }
 
   buildTypes {
@@ -35,6 +43,14 @@ android {
   buildFeatures {
     compose = true
   }
+
+  packaging {
+    jniLibs {
+      useLegacyPackaging = false
+    }
+  }
+
+
 }
 
 dependencies {
