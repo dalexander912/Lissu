@@ -31,7 +31,7 @@ fun Lissu(modifier: Modifier = Modifier) {
 
       }
       entry<Routes.Scanner> {
-
+        onBack = { backStack.removeLastOrNull() }
       }
       entry<Routes.Maps> {
 
