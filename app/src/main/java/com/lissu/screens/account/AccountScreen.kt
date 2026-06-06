@@ -43,11 +43,19 @@ private val RedText    = Color(0xFFDC2626)
 @Composable
 fun AccountScreen(
     onBack: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    onNavigateToAddList: () -> Unit,
+    onNavigateToMaps: () -> Unit,
+    onNavigateToAccount: () -> Unit
 
 ) {
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
+        onNavigateToHome = onNavigateToHome,      // Pasar al scaffold
+        onNavigateToAddList = onNavigateToAddList,
+        onNavigateToMaps = onNavigateToMaps,
+        onNavigateToAccount = onNavigateToAccount,
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.White)

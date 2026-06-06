@@ -21,8 +21,15 @@ fun Lissu(modifier: Modifier = Modifier) {
       }
       entry<Routes.Home> {
         HomeScreen(
-          onNavigateToAccountScreen = {
-            //resultViewModel.fetchOptions()
+          onNavigateToHome = {
+          },
+          onNavigateToAddList = {
+            backStack.add(Routes.AddList)
+          },
+          onNavigateToMaps = {
+            backStack.add(Routes.Maps)
+          },
+          onNavigateToAccount = {
             backStack.add(Routes.Account)
           }
         )
@@ -44,7 +51,19 @@ fun Lissu(modifier: Modifier = Modifier) {
       }
       entry<Routes.Account> {
         AccountScreen(
-          onBack = { backStack.removeLastOrNull() }
+          onBack = { backStack.removeLastOrNull() },
+          onNavigateToHome = {
+            backStack.add(Routes.Home)
+          },
+          onNavigateToAddList = {
+            backStack.add(Routes.AddList)
+          },
+          onNavigateToMaps = {
+            backStack.add(Routes.Maps)
+          },
+          onNavigateToAccount = {
+
+          }
         )
       }
     }
