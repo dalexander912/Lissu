@@ -38,6 +38,7 @@ import com.lissu.ui.theme.Lissu_Purple2
 
 @Composable
 fun HomeScreen(
+  onNavigateToScanner: () -> Unit,
   viewModel: HomeViewModel = viewModel()
 ) {
   val isDark = isSystemInDarkTheme()
@@ -133,7 +134,7 @@ fun HomeScreen(
       // Escanear codigo de barras //
       Surface(
         modifier = Modifier.fillMaxWidth()
-          .clickable {  },
+          .clickable { onNavigateToScanner() },
         color = if(isDark) Lissu_Purple else Lissu_Purple2,
         contentColor = Color.White,
         shape = RoundedCornerShape(16.dp)
@@ -160,5 +161,5 @@ fun HomeScreen(
 //@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light Mode")
 @Composable
 fun HomePreview() {
-  HomeScreen()
+  HomeScreen( onNavigateToScanner = {} )
 }

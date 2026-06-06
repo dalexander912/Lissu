@@ -41,7 +41,7 @@ object KtorClient {
             header(HttpHeaders.ContentType, "application/json")
             header(HttpHeaders.Accept, "application/json")
 
-            //  User-Agent identificable en su documentación
+            //  User-Agent identificable para openfoodfacts
             header(HttpHeaders.UserAgent, "AppScanner - Android - Version 1.0")
         }
     }

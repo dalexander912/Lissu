@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.lissu.screens.home.HomeScreen
+import com.lissu.screens.scanner.ScannerScreen
 
 @Composable
 fun Lissu(modifier: Modifier = Modifier) {
@@ -19,7 +20,9 @@ fun Lissu(modifier: Modifier = Modifier) {
 
       }
       entry<Routes.Home> {
-        HomeScreen()
+        HomeScreen(
+          onNavigateToScanner = { backStack.add(Routes.Scanner) }
+        )
       }
       entry<Routes.AddList> {
 
@@ -31,7 +34,9 @@ fun Lissu(modifier: Modifier = Modifier) {
 
       }
       entry<Routes.Scanner> {
-        onBack = { backStack.removeLastOrNull() }
+        ScannerScreen(
+          onBack = { backStack.removeLastOrNull() }
+        )
       }
       entry<Routes.Maps> {
 
