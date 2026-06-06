@@ -1,49 +1,28 @@
 package com.lissu.data.repository
 
-import android.util.Log
-import com.lissu.BuildConfig
+import com.lissu.data.api.items.ItemResponseDTO
+import com.lissu.data.api.items.toModel
+import com.lissu.data.model.Item
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.header
-import io.ktor.http.HttpHeaders
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 
-object KtorClient {
+class ApiRepository(private val client: HttpClient) : ItemInterface {
 
-    private const val BASE_URL = "https://qjcxdvfzyseuvezacxsd.supabase.co/functions/v1/rankeuca/"
+    override suspend fun fetchItemByBarcode(barcode: String): Result<Item> {
+        return try {
+            val url = "https://world.openfoodfacts.org/api/v0/product/$barcode.json"
 
-    private const val API_KEY = BuildConfig.API_TOKEN
+            val response: ItemResponseDTO = client.get(url).body()
 
-    val client = HttpClient(OkHttp) {
-        // Parseo automático de JSON
-        install(ContentNegotiation) {
-            json(Json {
-                ignoreUnknownKeys = true
-            })
-        }
-
-        // Plugin de logging
-        install(Logging) {
-            logger = object : Logger {
-                override fun log(message: String) {
-                    Log.d("KtorClient", message)
-                }
+            if (response.status == 1) {
+                Result.success(response.toModel(barcode))
+            } else {
+                Result.failure(Exception("Item no encontrado en el servidor externo"))
             }
-            level = LogLevel.ALL
-        }
-
-        // Configuración aplicada a todas las peticiones
-        defaultRequest {
-            url(BASE_URL)
-            header(HttpHeaders.ContentType, "application/json")
-            header(HttpHeaders.Accept, "application/json")
-            header(HttpHeaders.Authorization, "Bearer $API_KEY")
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
+
 }
