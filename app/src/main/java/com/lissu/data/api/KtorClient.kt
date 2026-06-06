@@ -14,8 +14,6 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 object KtorClient {
-
-
     private const val BASE_URL = "https://world.openfoodfacts.org/"
 
     val client = HttpClient(OkHttp) {
