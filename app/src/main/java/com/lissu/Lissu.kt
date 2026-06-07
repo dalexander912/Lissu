@@ -1,6 +1,10 @@
 package com.lissu
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -13,6 +17,7 @@ import com.lissu.screens.register.RegisterScreen
 @Composable
 fun Lissu(modifier: Modifier = Modifier) {
   val backStack = rememberNavBackStack(Routes.Home)
+  var isLoggedIn by remember { mutableStateOf(false) }
 
   NavDisplay(
     backStack = backStack,
@@ -31,6 +36,10 @@ fun Lissu(modifier: Modifier = Modifier) {
           onBack = { backStack.removeLastOrNull() },
           onNavigateToRegister = {
             backStack.add(Routes.Register)
+          },
+          onLoginSuccess = {
+            isLoggedIn = true
+            backStack.add(Routes.Account)
           }
         )
       }
@@ -66,6 +75,8 @@ fun Lissu(modifier: Modifier = Modifier) {
       }
       entry<Routes.Account> {
         AccountScreen(
+          isLoggedIn = isLoggedIn,
+          onLogout = { isLoggedIn = false },
           onBack = { backStack.removeLastOrNull() },
           onNavigateToHome = {
             backStack.add(Routes.Home)
@@ -85,7 +96,6 @@ fun Lissu(modifier: Modifier = Modifier) {
           onNavigateToRegister = {
             backStack.add(Routes.Register)
           }
-
         )
       }
     }

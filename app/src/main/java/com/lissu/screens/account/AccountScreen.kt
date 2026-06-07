@@ -15,10 +15,6 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,9 +38,8 @@ private val RedText    = Color(0xFFDC2626)
 
 @Composable
 fun AccountScreen(
-    onLoginClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {},
-    onLogoutClick: () -> Unit = {},
+    isLoggedIn: Boolean,
+    onLogout: () -> Unit,
     onBack: () -> Unit = {},
     onNavigateToHome: () -> Unit = {},
     onNavigateToAddList: () -> Unit = {},
@@ -53,9 +48,6 @@ fun AccountScreen(
     onNavigateToLogin: () -> Unit = {},
     onNavigateToRegister: () -> Unit = {}
 ) {
-
-    var isLoggedIn by remember { mutableStateOf(false) }
-
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
@@ -133,10 +125,7 @@ fun AccountScreen(
                         .padding(horizontal = 14.dp),
                     shape = RoundedCornerShape(12.dp),
                     color = Color.White,
-                    onClick = {
-                        isLoggedIn = false
-                        onLogoutClick()
-                    }
+                    onClick = onLogout
                 ) {
                     Row(
                         modifier = Modifier
@@ -161,7 +150,6 @@ fun AccountScreen(
                     }
                 }
             } else {
-                // MODO INVITADO
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -169,10 +157,7 @@ fun AccountScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Button(
-                        onClick = {
-                            isLoggedIn = true
-                            onNavigateToLogin()
-                        },
+                        onClick = onNavigateToLogin,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple)
@@ -191,7 +176,6 @@ fun AccountScreen(
                     }
                 }
             }
-
             Spacer(Modifier.height(24.dp))
         }
     }

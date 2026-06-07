@@ -32,6 +32,7 @@ import com.lissu.ui.theme.Lissu_Purple
 fun LoginScreen(
     onBack: () -> Unit,
     onNavigateToRegister: () -> Unit,
+    onLoginSuccess: () -> Unit,
 ) {
     var usuario by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
@@ -143,7 +144,7 @@ fun LoginScreen(
                 Spacer(Modifier.height(24.dp))
 
                 Button(
-                    onClick = { },
+                    onClick = onLoginSuccess,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
