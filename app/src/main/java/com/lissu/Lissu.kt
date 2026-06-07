@@ -7,6 +7,8 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.lissu.screens.account.AccountScreen
 import com.lissu.screens.home.HomeScreen
+import com.lissu.screens.login.LoginScreen
+import com.lissu.screens.register.RegisterScreen
 
 @Composable
 fun Lissu(modifier: Modifier = Modifier) {
@@ -17,10 +19,20 @@ fun Lissu(modifier: Modifier = Modifier) {
     onBack = { backStack.removeLastOrNull() },
     entryProvider = entryProvider {
       entry<Routes.Register> {
-
+        RegisterScreen(
+          onBack = { backStack.removeLastOrNull() },
+          onNavigateToLogin = {
+            backStack.add(Routes.Login)
+          }
+        )
       }
       entry<Routes.Login> {
-
+        LoginScreen(
+          onBack = { backStack.removeLastOrNull() },
+          onNavigateToRegister = {
+            backStack.add(Routes.Register)
+          }
+        )
       }
       entry<Routes.Home> {
         HomeScreen(
@@ -66,7 +78,14 @@ fun Lissu(modifier: Modifier = Modifier) {
           },
           onNavigateToAccount = {
 
+          },
+          onNavigateToLogin = {
+            backStack.add(Routes.Login)
+          },
+          onNavigateToRegister = {
+            backStack.add(Routes.Register)
           }
+
         )
       }
     }

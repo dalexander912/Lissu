@@ -23,9 +23,12 @@ import com.lissu.ui.theme.Lissu_DarkPurple
 import com.lissu.ui.theme.Lissu_Purple
 
 
-@Preview(showBackground = true)
+
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onBack: () -> Unit,
+    onNavigateToRegister: () -> Unit,
+) {
     var usuario by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
 
@@ -153,7 +156,7 @@ fun LoginScreen() {
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = {  },
+                onClick = onNavigateToRegister,
                 modifier = Modifier.height(48.dp),
                 shape = RoundedCornerShape(24.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Lissu_DarkPurple),
@@ -177,8 +180,8 @@ fun LoginScreen() {
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
-@Composable
-fun LoginPreview() {
-    LoginScreen()
-}
+//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
+//@Composable
+//fun LoginPreview() {
+//    LoginScreen()
+//}

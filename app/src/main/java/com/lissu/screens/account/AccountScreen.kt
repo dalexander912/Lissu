@@ -49,7 +49,9 @@ fun AccountScreen(
     onNavigateToHome: () -> Unit = {},
     onNavigateToAddList: () -> Unit = {},
     onNavigateToMaps: () -> Unit = {},
-    onNavigateToAccount: () -> Unit = {}
+    onNavigateToAccount: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {},
+    onNavigateToRegister: () -> Unit = {}
 ) {
 
     var isLoggedIn by remember { mutableStateOf(false) }
@@ -169,7 +171,7 @@ fun AccountScreen(
                     Button(
                         onClick = {
                             isLoggedIn = true
-                            onLoginClick()
+                            onNavigateToLogin()
                         },
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
@@ -179,7 +181,7 @@ fun AccountScreen(
                     }
 
                     OutlinedButton(
-                        onClick = onRegisterClick,
+                        onClick = onNavigateToRegister,
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(1.5.dp, Lissu_Purple),
