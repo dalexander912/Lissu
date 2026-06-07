@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -53,9 +54,20 @@ fun AppScaffold(
   modifier: Modifier = Modifier,
   title: String = "",
   currentScreen: Routes,
+  onBack: (() -> Unit)? = null,
   navigationIcon: @Composable (() -> Unit)? = null,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+  showTopBar: Boolean = true,
+  showBottomBar: Boolean = true,
+
+  onNavigateToHome: () -> Unit = {},
+  onNavigateToAddList: () -> Unit = {},
+  onNavigateToMaps: () -> Unit = {},
+  onNavigateToAccount: () -> Unit = {},
+
   content: @Composable (PaddingValues) -> Unit
+
+
 ) {
   val isDark = isSystemInDarkTheme()
 
@@ -63,7 +75,7 @@ fun AppScaffold(
     modifier = modifier.fillMaxSize(),
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     topBar = {
-      if (title.isNotEmpty()) {
+      if (showTopBar && title.isNotEmpty()) {
         TopAppBar(
           colors = topAppBarColors(
             containerColor = Lissu_Purple,
@@ -80,7 +92,19 @@ fun AppScaffold(
               Text(title, fontWeight = FontWeight.Bold)
             }
           },
-          navigationIcon = { navigationIcon?.invoke() },
+          navigationIcon = {
+            if (navigationIcon != null) {
+              navigationIcon()
+            } else if (onBack != null) {
+              IconButton(onClick = onBack) {
+                Icon(
+                  Icons.AutoMirrored.Filled.ArrowBack,
+                  contentDescription = "Volver",
+                  tint = Color.White
+                )
+              }
+            }
+          },
           actions = {
             IconButton(onClick = {  }) {
               Icon(
@@ -94,25 +118,27 @@ fun AppScaffold(
       }
     },
     bottomBar = {
-      BottomAppBar(
-        containerColor = if(isDark) Lissu_DarkPurple else Lissu_LightPurple,
-        contentColor = if(isDark) Color.White else Color.Black,
-        actions = {
-          Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-          ) {
-            BottomBarButton({  },
-              R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
-            BottomBarButton({  },
-              R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
-            BottomBarButton({  },
-              R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
-            BottomBarButton({  },
-              R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
+      if (showBottomBar) {
+        BottomAppBar(
+          containerColor = if(isDark) Lissu_DarkPurple else Lissu_LightPurple,
+          contentColor = if(isDark) Color.White else Color.Black,
+          actions = {
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceAround
+            ) {
+              BottomBarButton(onNavigateToHome,
+                R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
+              BottomBarButton(onNavigateToAddList,
+                R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
+              BottomBarButton(onNavigateToMaps,
+                R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
+              BottomBarButton(onNavigateToAccount,
+                R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
+            }
           }
-        }
-      )
+        )
+      }
     }
   ) { innerPadding ->
     content(innerPadding)

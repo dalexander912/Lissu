@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,15 +37,23 @@ import com.lissu.ui.theme.Lissu_Purple2
 
 @Composable
 fun HomeScreen(
+  viewModel: HomeViewModel = viewModel(),
+  onNavigateToHome: () -> Unit,
+  onNavigateToAddList: () -> Unit,
+  onNavigateToMaps: () -> Unit,
+  onNavigateToAccount: () -> Unit,
   onNavigateToScanner: () -> Unit,
-  viewModel: HomeViewModel = viewModel()
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists = emptyList<Any>()
 
   AppScaffold(
     title = "Usuario1",
-    currentScreen = Routes.Home
+    currentScreen = Routes.Home,
+    onNavigateToHome = onNavigateToHome,
+    onNavigateToAddList = onNavigateToAddList,
+    onNavigateToMaps = onNavigateToMaps,
+    onNavigateToAccount = onNavigateToAccount
   ) { innerPadding ->
     Column(
       modifier = Modifier.padding(innerPadding)
@@ -158,8 +165,13 @@ fun HomeScreen(
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light Mode")
 @Composable
 fun HomePreview() {
-  HomeScreen( onNavigateToScanner = {} )
+  HomeScreen(
+    onNavigateToHome = {},
+    onNavigateToAddList = {},
+    onNavigateToMaps = {},
+    onNavigateToAccount = {},
+      onNavigateToScanner = {}
+  )
 }
