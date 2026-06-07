@@ -9,16 +9,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -29,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import com.lissu.AppScaffold
 import com.lissu.R
 import com.lissu.Routes
-import com.lissu.ui.theme.Lissu_DarkPurple
 import com.lissu.ui.theme.Lissu_LightPurple
 import com.lissu.ui.theme.Lissu_Purple
 
@@ -37,18 +38,22 @@ private val BgPage     = Color(0xFFF5F5F5)
 private val BorderColor = Color(0xFFE5E7EB)
 private val TextHint   = Color(0xFF6B7280)
 private val TextMain   = Color(0xFF111827)
-private val RedLight   = Color(0xFFFCA5A5)
 private val RedText    = Color(0xFFDC2626)
 
 @Composable
 fun AccountScreen(
-    onBack: () -> Unit,
-    onNavigateToHome: () -> Unit,
-    onNavigateToAddList: () -> Unit,
-    onNavigateToMaps: () -> Unit,
-    onNavigateToAccount: () -> Unit
-
+    onLoginClick: () -> Unit = {},
+    onRegisterClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
+    onBack: () -> Unit = {},
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAddList: () -> Unit = {},
+    onNavigateToMaps: () -> Unit = {},
+    onNavigateToAccount: () -> Unit = {}
 ) {
+
+    var isLoggedIn by remember { mutableStateOf(false) }
+
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
@@ -56,7 +61,6 @@ fun AccountScreen(
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
-
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -87,61 +91,102 @@ fun AccountScreen(
                     )
                 }
                 Spacer(Modifier.height(10.dp))
+
                 Text(
-                    text = "Usuario1",
+                    text = if (isLoggedIn) "Usuario1" else "Modo Invitado",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     color = TextMain
                 )
+                if (!isLoggedIn) {
+                    Text(
+                        text = "Inicia sesión o registrate",
+                        fontSize = 13.sp,
+                        color = TextHint,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
 
             Spacer(Modifier.height(12.dp))
 
-            // Información personal
-            InfoSection(label = "Información personal") {
-                InfoRow(icon = Icons.Outlined.Person,  label = "Nombre",   value = "Usuario1")
-                HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
-                InfoRow(icon = Icons.Outlined.Email,   label = "Correo",   value = "usuario1@email.com")
+            if (isLoggedIn) {
+                InfoSection(label = "Información personal") {
+                    InfoRow(icon = Icons.Outlined.Person, label = "Nombre", value = "Usuario1")
+                    HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
+                    InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = "usuario1@email.com")
+                }
 
-            }
+                Spacer(Modifier.height(12.dp))
 
-            Spacer(Modifier.height(12.dp))
+                InfoSection(label = "Seguridad") {
+                    InfoRow(icon = Icons.Outlined.Lock, label = "Contraseña", value = "••••••••")
+                }
 
-            // Seguridad
-            InfoSection(label = "Seguridad") {
-                InfoRow(icon = Icons.Outlined.Lock, label = "Contraseña", value = "••••••••")
-            }
+                Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(16.dp))
-
-            // Cerrar sesión
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 14.dp),
-                shape = RoundedCornerShape(12.dp),
-                color = Color.White,
-            ) {
-                Row(
+                Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 14.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(horizontal = 14.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color.White,
+                    onClick = {
+                        isLoggedIn = false
+                        onLogoutClick()
+                    }
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Outlined.Logout,
-                        contentDescription = null,
-                        tint = RedText,
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        text = "Cerrar sesión",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = RedText
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 14.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.Logout,
+                            contentDescription = null,
+                            tint = RedText,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = "Cerrar sesión",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = RedText
+                        )
+                    }
+                }
+            } else {
+                // MODO INVITADO
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 14.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            isLoggedIn = true
+                            onLoginClick()
+                        },
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple)
+                    ) {
+                        Text(text = "Iniciar Sesión", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
+                    }
+
+                    OutlinedButton(
+                        onClick = onRegisterClick,
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.5.dp, Lissu_Purple),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Lissu_Purple)
+                    ) {
+                        Text(text = "Crear una cuenta", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                    }
                 }
             }
 
