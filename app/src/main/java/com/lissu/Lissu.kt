@@ -16,6 +16,9 @@ fun Lissu(modifier: Modifier = Modifier) {
     backStack = backStack,
     onBack = { backStack.removeLastOrNull() },
     entryProvider = entryProvider {
+      entry<Routes.Register> {
+
+      }
       entry<Routes.Login> {
 
       }
