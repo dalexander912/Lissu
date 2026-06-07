@@ -25,8 +25,6 @@ import com.lissu.R
 import com.lissu.Routes
 import com.lissu.ui.theme.Lissu_DarkPurple
 import com.lissu.ui.theme.Lissu_Purple
-import okhttp3.Route
-
 
 @Composable
 fun RegisterScreen(
@@ -40,13 +38,16 @@ fun RegisterScreen(
 
     AppScaffold (
         title = "Registrarse",
-        currentScreen = Routes.Register
+        currentScreen = Routes.Register,
+        showTopBar = false,
+        showBottomBar = false
     ) { innerpadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerpadding)
                 .background(Lissu_Purple)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
 
@@ -74,11 +75,10 @@ fun RegisterScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
                     .padding(horizontal = 20.dp, vertical = 12.dp)
                     .background(
                         color = Color(0xFFF5F5F5),
-                        shape = RoundedCornerShape(32.dp)
+                        shape = RoundedCornerShape(20.dp)
                     )
                     .padding(horizontal = 24.dp, vertical = 28.dp)
             ) {
@@ -248,7 +248,8 @@ fun RegisterScreen(
 }
 
 //@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
+//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light Mode")
 //@Composable
 //fun RegisterPreview() {
-//    RegisterScreen()
+//    RegisterScreen(onBack = {}, onNavigateToLogin = {})
 //}

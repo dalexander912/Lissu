@@ -6,7 +6,9 @@ import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,13 +39,15 @@ fun LoginScreen(
     AppScaffold(
         title = "Ingresar",
         currentScreen = Routes.Login,
-
+        showTopBar = false,
+        showBottomBar = false
     ) { innerpadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerpadding)
                 .background(Lissu_Purple)
+                .verticalScroll(rememberScrollState())
         ) {
 
 
@@ -70,11 +74,10 @@ fun LoginScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
                     .padding(horizontal = 20.dp, vertical = 12.dp)
                     .background(
                         color = Color(0xFFF5F5F5),
-                        shape = RoundedCornerShape(32.dp)
+                        shape = RoundedCornerShape(20.dp)
                     )
                     .padding(horizontal = 24.dp, vertical = 28.dp)
             ) {
@@ -188,9 +191,3 @@ fun LoginScreen(
         }
     }
 }
-
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
-//@Composable
-//fun LoginPreview() {
-//    LoginScreen()
-//}
