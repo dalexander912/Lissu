@@ -52,15 +52,11 @@ fun AccountScreen(
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
-        onNavigateToHome = onNavigateToHome,      // Pasar al scaffold
+        onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.White)
-            }
-        }
+
     ) { innerPadding ->
         Column(
             modifier = Modifier
