@@ -57,6 +57,8 @@ fun AppScaffold(
   onBack: (() -> Unit)? = null,
   navigationIcon: @Composable (() -> Unit)? = null,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+  showTopBar: Boolean = true,
+  showBottomBar: Boolean = true,
 
   onNavigateToHome: () -> Unit = {},
   onNavigateToAddList: () -> Unit = {},
@@ -73,7 +75,7 @@ fun AppScaffold(
     modifier = modifier.fillMaxSize(),
     snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     topBar = {
-      if (title.isNotEmpty()) {
+      if (showTopBar && title.isNotEmpty()) {
         TopAppBar(
           colors = topAppBarColors(
             containerColor = Lissu_Purple,
@@ -116,25 +118,27 @@ fun AppScaffold(
       }
     },
     bottomBar = {
-      BottomAppBar(
-        containerColor = if(isDark) Lissu_DarkPurple else Lissu_LightPurple,
-        contentColor = if(isDark) Color.White else Color.Black,
-        actions = {
-          Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
-          ) {
-            BottomBarButton(onNavigateToHome,
-              R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
-            BottomBarButton(onNavigateToAddList,
-              R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
-            BottomBarButton(onNavigateToMaps,
-              R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
-            BottomBarButton(onNavigateToAccount,
-              R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
+      if (showBottomBar) {
+        BottomAppBar(
+          containerColor = if(isDark) Lissu_DarkPurple else Lissu_LightPurple,
+          contentColor = if(isDark) Color.White else Color.Black,
+          actions = {
+            Row(
+              modifier = Modifier.fillMaxWidth(),
+              horizontalArrangement = Arrangement.SpaceAround
+            ) {
+              BottomBarButton(onNavigateToHome,
+                R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
+              BottomBarButton(onNavigateToAddList,
+                R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
+              BottomBarButton(onNavigateToMaps,
+                R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
+              BottomBarButton(onNavigateToAccount,
+                R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
+            }
           }
-        }
-      )
+        )
+      }
     }
   ) { innerPadding ->
     content(innerPadding)
