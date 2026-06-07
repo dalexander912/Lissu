@@ -13,6 +13,7 @@ import com.lissu.screens.account.AccountScreen
 import com.lissu.screens.home.HomeScreen
 import com.lissu.screens.login.LoginScreen
 import com.lissu.screens.register.RegisterScreen
+import com.lissu.screens.scanner.ScannerScreen
 
 @Composable
 fun Lissu(modifier: Modifier = Modifier) {
@@ -56,6 +57,7 @@ fun Lissu(modifier: Modifier = Modifier) {
           onNavigateToAccount = {
             backStack.add(Routes.Account)
           }
+          onNavigateToScanner = { backStack.add(Routes.Scanner) }
         )
       }
       entry<Routes.AddList> {
@@ -68,7 +70,9 @@ fun Lissu(modifier: Modifier = Modifier) {
 
       }
       entry<Routes.Scanner> {
-
+        ScannerScreen(
+          onBack = { backStack.removeLastOrNull() }
+        )
       }
       entry<Routes.Maps> {
 

@@ -42,6 +42,7 @@ fun HomeScreen(
   onNavigateToAddList: () -> Unit,
   onNavigateToMaps: () -> Unit,
   onNavigateToAccount: () -> Unit,
+  onNavigateToScanner: () -> Unit,
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists = emptyList<Any>()
@@ -140,7 +141,7 @@ fun HomeScreen(
       // Escanear codigo de barras //
       Surface(
         modifier = Modifier.fillMaxWidth()
-          .clickable {  },
+          .clickable { onNavigateToScanner() },
         color = if(isDark) Lissu_Purple else Lissu_Purple2,
         contentColor = Color.White,
         shape = RoundedCornerShape(16.dp)
@@ -170,6 +171,7 @@ fun HomePreview() {
     onNavigateToHome = {},
     onNavigateToAddList = {},
     onNavigateToMaps = {},
-    onNavigateToAccount = {}
+    onNavigateToAccount = {},
+    onNavigateToScanner = {}
   )
 }
