@@ -3,6 +3,7 @@ package com.lissu.screens.account
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -30,12 +31,6 @@ import com.lissu.Routes
 import com.lissu.ui.theme.Lissu_LightPurple
 import com.lissu.ui.theme.Lissu_Purple
 
-private val BgPage     = Color(0xFFF5F5F5)
-private val BorderColor = Color(0xFFE5E7EB)
-private val TextHint   = Color(0xFF6B7280)
-private val TextMain   = Color(0xFF111827)
-private val RedText    = Color(0xFFDC2626)
-
 @Composable
 fun AccountScreen(
     isLoggedIn: Boolean,
@@ -48,6 +43,15 @@ fun AccountScreen(
     onNavigateToLogin: () -> Unit = {},
     onNavigateToRegister: () -> Unit = {}
 ) {
+    val isDark = isSystemInDarkTheme()
+    val bgPage = if (isDark) Color(0xFF121212) else Color(0xFFF5F5F5)
+    val cardBg = if (isDark) Color(0xFF1E1E1E) else Color.White
+    val textMain = if (isDark) Color.White else Color(0xFF111827)
+    val textHint = if (isDark) Color(0xFF9CA3AF) else Color(0xFF6B7280)
+    val borderColor = if (isDark) Color(0xFF374151) else Color(0xFFE5E7EB)
+    val iconBg = if (isDark) Color(0xFF2D2D2D) else Color(0xFFF3F4F6)
+    val redText = Color(0xFFDC2626)
+
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
@@ -59,7 +63,7 @@ fun AccountScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BgPage)
+                .background(bgPage)
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -67,14 +71,14 @@ fun AccountScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .background(cardBg)
                     .padding(vertical = 28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = Modifier
                         .size(80.dp)
-                        .background(Color(0xFFF3F4F6), CircleShape),
+                        .background(iconBg, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
@@ -90,13 +94,13 @@ fun AccountScreen(
                     text = if (isLoggedIn) "Usuario1" else "Modo Invitado",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
-                    color = TextMain
+                    color = textMain
                 )
                 if (!isLoggedIn) {
                     Text(
                         text = "Inicia sesión o registrate",
                         fontSize = 13.sp,
-                        color = TextHint,
+                        color = textHint,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -105,16 +109,16 @@ fun AccountScreen(
             Spacer(Modifier.height(12.dp))
 
             if (isLoggedIn) {
-                InfoSection(label = "Información personal") {
-                    InfoRow(icon = Icons.Outlined.Person, label = "Nombre", value = "Usuario1")
-                    HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
-                    InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = "usuario1@email.com")
+                InfoSection(label = "Información personal", textHint = textHint, cardBg = cardBg, borderColor = borderColor) {
+                    InfoRow(icon = Icons.Outlined.Person, label = "Nombre", value = "Usuario1", textMain = textMain, textHint = textHint)
+
+                    InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = "usuario1@email.com", textMain = textMain, textHint = textHint)
                 }
 
                 Spacer(Modifier.height(12.dp))
 
-                InfoSection(label = "Seguridad") {
-                    InfoRow(icon = Icons.Outlined.Lock, label = "Contraseña", value = "••••••••")
+                InfoSection(label = "Seguridad", textHint = textHint, cardBg = cardBg, borderColor = borderColor) {
+                    InfoRow(icon = Icons.Outlined.Lock, label = "Contraseña", value = "••••••••", textMain = textMain, textHint = textHint)
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -124,7 +128,7 @@ fun AccountScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 14.dp),
                     shape = RoundedCornerShape(12.dp),
-                    color = Color.White,
+                    color = cardBg,
                     onClick = onLogout
                 ) {
                     Row(
@@ -137,7 +141,7 @@ fun AccountScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.Logout,
                             contentDescription = null,
-                            tint = RedText,
+                            tint = redText,
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(Modifier.width(8.dp))
@@ -145,7 +149,7 @@ fun AccountScreen(
                             text = "Cerrar sesión",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
-                            color = RedText
+                            color = redText
                         )
                     }
                 }
@@ -170,7 +174,7 @@ fun AccountScreen(
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(1.5.dp, Lissu_Purple),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Lissu_Purple)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = if (isDark) Color.White else Lissu_Purple)
                     ) {
                         Text(text = "Crear una cuenta", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                     }
@@ -182,19 +186,19 @@ fun AccountScreen(
 }
 
 @Composable
-private fun InfoSection(label: String, content: @Composable ColumnScope.() -> Unit) {
+private fun InfoSection(label: String, textHint: Color, cardBg: Color, borderColor: Color, content: @Composable ColumnScope.() -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 14.dp)) {
         Text(
             text = label.uppercase(),
             fontSize = 11.sp,
-            color = TextHint,
+            color = textHint,
             letterSpacing = 0.06.sp,
             modifier = Modifier.padding(start = 2.dp, bottom = 6.dp)
         )
         Surface(
             shape = RoundedCornerShape(12.dp),
-            color = Color.White,
-            border = BorderStroke(0.5.dp, BorderColor)
+            color = cardBg,
+            border = BorderStroke(0.5.dp, borderColor)
         ) {
             Column(modifier = Modifier.fillMaxWidth(), content = content)
         }
@@ -202,7 +206,7 @@ private fun InfoSection(label: String, content: @Composable ColumnScope.() -> Un
 }
 
 @Composable
-private fun InfoRow(icon: ImageVector, label: String, value: String) {
+private fun InfoRow(icon: ImageVector, label: String, value: String, textMain: Color, textHint: Color) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -224,9 +228,9 @@ private fun InfoRow(icon: ImageVector, label: String, value: String) {
             )
         }
         Column {
-            Text(text = label, fontSize = 11.sp, color = TextHint)
+            Text(text = label, fontSize = 11.sp, color = textHint)
             Spacer(Modifier.height(2.dp))
-            Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextMain)
+            Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = textMain)
         }
     }
 }
