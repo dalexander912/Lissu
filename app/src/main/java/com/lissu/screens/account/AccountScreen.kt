@@ -183,10 +183,10 @@ private fun InfoSection(label: String, content: @Composable ColumnScope.() -> Un
     val colorScheme = MaterialTheme.colorScheme
     Column(modifier = Modifier.padding(horizontal = 14.dp)) {
         Text(
-            text = label.uppercase(),
-            fontSize = 11.sp,
+            text = label,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
             color = colorScheme.onSurfaceVariant,
-            letterSpacing = 0.06.sp,
             modifier = Modifier.padding(start = 2.dp, bottom = 6.dp)
         )
         Surface(
