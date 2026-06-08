@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.lissu.AppScaffold
 import com.lissu.R
 import com.lissu.Routes
+import com.lissu.ui.theme.Lissu_LightDarkPurple
 import com.lissu.ui.theme.Lissu_Purple
 
 @Composable
@@ -43,7 +44,7 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerpadding)
-                .background(Lissu_Purple)
+                .background(Lissu_LightDarkPurple)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
