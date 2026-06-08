@@ -27,6 +27,10 @@ fun LoginScreen(
     onBack: () -> Unit,
     onNavigateToRegister: () -> Unit,
     onLoginSuccess: () -> Unit,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAddList: () -> Unit = {},
+    onNavigateToMaps: () -> Unit = {},
+    onNavigateToAccount: () -> Unit = {},
 ) {
     var usuario by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
@@ -35,7 +39,11 @@ fun LoginScreen(
         title = "Ingresar",
         currentScreen = Routes.Login,
         showTopBar = false,
-        showBottomBar = false
+        showBottomBar = true,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToAddList = onNavigateToAddList,
+        onNavigateToMaps = onNavigateToMaps,
+        onNavigateToAccount = onNavigateToAccount,
     ) { innerpadding ->
         Column(
             modifier = Modifier

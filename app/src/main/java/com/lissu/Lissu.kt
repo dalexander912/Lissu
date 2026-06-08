@@ -28,6 +28,18 @@ fun Lissu(modifier: Modifier = Modifier) {
           onBack = { backStack.removeLastOrNull() },
           onNavigateToLogin = {
             backStack.add(Routes.Login)
+          },
+          onNavigateToHome = {
+            backStack.add(Routes.Home)
+          },
+          onNavigateToAddList = {
+            backStack.add(Routes.AddList)
+          },
+          onNavigateToMaps = {
+            backStack.add(Routes.Maps)
+          },
+          onNavigateToAccount = {
+            backStack.add(Routes.Account)
           }
         )
       }
@@ -39,6 +51,18 @@ fun Lissu(modifier: Modifier = Modifier) {
           },
           onLoginSuccess = {
             isLoggedIn = true
+            backStack.add(Routes.Account)
+          },
+          onNavigateToHome = {
+            backStack.add(Routes.Home)
+          },
+          onNavigateToAddList = {
+            backStack.add(Routes.AddList)
+          },
+          onNavigateToMaps = {
+            backStack.add(Routes.Maps)
+          },
+          onNavigateToAccount = {
             backStack.add(Routes.Account)
           }
         )

@@ -28,6 +28,10 @@ import com.lissu.ui.theme.Lissu_Purple
 fun RegisterScreen(
     onBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAddList: () -> Unit = {},
+    onNavigateToMaps: () -> Unit = {},
+    onNavigateToAccount: () -> Unit = {},
 ) {
     var usuario by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
@@ -38,7 +42,11 @@ fun RegisterScreen(
         title = "Registrarse",
         currentScreen = Routes.Register,
         showTopBar = false,
-        showBottomBar = false
+        showBottomBar = true,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToAddList = onNavigateToAddList,
+        onNavigateToMaps = onNavigateToMaps,
+        onNavigateToAccount = onNavigateToAccount,
     ) { innerpadding ->
         Column(
             modifier = Modifier
