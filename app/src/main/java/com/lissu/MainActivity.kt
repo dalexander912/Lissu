@@ -13,9 +13,9 @@ import com.lissu.ui.theme.LissuTheme
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
+    installSplashScreen()
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
-    installSplashScreen()
     setContent {
       LissuTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
