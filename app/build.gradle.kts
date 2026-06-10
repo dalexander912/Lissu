@@ -67,4 +67,10 @@ dependencies {
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
   debugImplementation(libs.androidx.compose.ui.tooling)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+  // Permisos para notificaciones
+  implementation(libs.accompanist.permissions)
+
+  // WorkManager: programación de notificaciones
+  implementation(libs.work.runtime.ktx)
 }
