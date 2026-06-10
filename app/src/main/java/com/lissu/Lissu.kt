@@ -10,6 +10,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.lissu.screens.account.AccountScreen
+import com.lissu.screens.addReminder.AddReminderScreen
 import com.lissu.screens.home.HomeScreen
 import com.lissu.screens.login.LoginScreen
 import com.lissu.screens.register.RegisterScreen
@@ -79,6 +80,9 @@ fun Lissu(modifier: Modifier = Modifier) {
           },
           onNavigateToAccount = {
             backStack.add(Routes.Account)
+          },
+          onNavigateToAddReminder = {
+            backStack.add(Routes.AddReminder)
           }
         )
       }
@@ -86,7 +90,13 @@ fun Lissu(modifier: Modifier = Modifier) {
 
       }
       entry<Routes.AddReminder> {
-
+        AddReminderScreen(
+          onBack = { backStack.removeLastOrNull() },
+          onNavigateToHome = { backStack.add(Routes.Home) },
+          onNavigateToAddList = { backStack.add(Routes.AddList) },
+          onNavigateToMaps = { backStack.add(Routes.Maps) },
+          onNavigateToAccount = { backStack.add(Routes.Account) }
+        )
       }
       entry<Routes.Reminders> {
 

@@ -1,4 +1,7 @@
 package com.lissu.screens.addReminder
 
-class AddReminderViewModel {
+import androidx.lifecycle.ViewModel
+
+class AddReminderViewModel : ViewModel() {
+
 }

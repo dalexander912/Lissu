@@ -42,6 +42,7 @@ fun HomeScreen(
   onNavigateToAddList: () -> Unit,
   onNavigateToMaps: () -> Unit,
   onNavigateToAccount: () -> Unit,
+  onNavigateToAddReminder: () -> Unit
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists = emptyList<Any>()
@@ -97,8 +98,8 @@ fun HomeScreen(
         // Agregar recordatorio //
         Surface(
           modifier = Modifier.weight(1f)
-            .clickable {  },
-          color = if(isDark) Lissu_Purple else Lissu_Purple2,
+            .clickable { onNavigateToAddReminder() },
+          color = Lissu_Purple,
           contentColor = Color.White,
           shape = RoundedCornerShape(16.dp)
         ) {
@@ -118,7 +119,7 @@ fun HomeScreen(
         Surface(
           modifier = Modifier.weight(1f)
             .clickable {  },
-          color = if(isDark) Lissu_Purple else Lissu_Purple2,
+          color = Lissu_Purple,
           contentColor = Color.White,
           shape = RoundedCornerShape(16.dp)
         ) {
@@ -141,7 +142,7 @@ fun HomeScreen(
       Surface(
         modifier = Modifier.fillMaxWidth()
           .clickable {  },
-        color = if(isDark) Lissu_Purple else Lissu_Purple2,
+        color = Lissu_Purple,
         contentColor = Color.White,
         shape = RoundedCornerShape(16.dp)
       ) {
@@ -170,6 +171,7 @@ fun HomePreview() {
     onNavigateToHome = {},
     onNavigateToAddList = {},
     onNavigateToMaps = {},
-    onNavigateToAccount = {}
+    onNavigateToAccount = {},
+    onNavigateToAddReminder = {}
   )
 }
