@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
           }
         }
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          Lissu(modifier = Modifier.padding(innerPadding))
+          Lissu(modifier = Modifier.padding(innerPadding), this)
         }
       }
     }

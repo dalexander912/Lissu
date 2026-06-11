@@ -64,9 +64,9 @@ fun AppScaffold(
   onNavigateToAddList: () -> Unit = {},
   onNavigateToMaps: () -> Unit = {},
   onNavigateToAccount: () -> Unit = {},
+  onNavigateToReminders: () -> Unit = {},
 
   content: @Composable (PaddingValues) -> Unit
-
 
 ) {
   val isDark = isSystemInDarkTheme()
@@ -106,7 +106,7 @@ fun AppScaffold(
             }
           },
           actions = {
-            IconButton(onClick = {  }) {
+            IconButton(onClick = onNavigateToReminders) {
               Icon(
                 Icons.Outlined.Notifications,
                 contentDescription = "Recordatorios",

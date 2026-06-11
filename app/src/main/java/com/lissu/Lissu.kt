@@ -1,5 +1,6 @@
 package com.lissu
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,9 +15,10 @@ import com.lissu.screens.addReminder.AddReminderScreen
 import com.lissu.screens.home.HomeScreen
 import com.lissu.screens.login.LoginScreen
 import com.lissu.screens.register.RegisterScreen
+import com.lissu.screens.reminders.RemindersScreen
 
 @Composable
-fun Lissu(modifier: Modifier = Modifier) {
+fun Lissu(modifier: Modifier = Modifier, context: Context) {
   val backStack = rememberNavBackStack(Routes.Home)
   var isLoggedIn by remember { mutableStateOf(false) }
 
@@ -83,6 +85,9 @@ fun Lissu(modifier: Modifier = Modifier) {
           },
           onNavigateToAddReminder = {
             backStack.add(Routes.AddReminder)
+          },
+          onNavigateToReminders = {
+            backStack.add(Routes.Reminders)
           }
         )
       }
@@ -95,11 +100,19 @@ fun Lissu(modifier: Modifier = Modifier) {
           onNavigateToHome = { backStack.add(Routes.Home) },
           onNavigateToAddList = { backStack.add(Routes.AddList) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
-          onNavigateToAccount = { backStack.add(Routes.Account) }
+          onNavigateToAccount = { backStack.add(Routes.Account) },
+          onNavigateToReminders = { backStack.add(Routes.Reminders) }
         )
       }
       entry<Routes.Reminders> {
-
+        RemindersScreen(
+          onBack = { backStack.removeLastOrNull() },
+          onNavigateToHome = { backStack.add(Routes.Home) },
+          onNavigateToAddList = { backStack.add(Routes.AddList) },
+          onNavigateToMaps = { backStack.add(Routes.Maps) },
+          onNavigateToAccount = { backStack.add(Routes.Account) },
+          context = context
+        )
       }
       entry<Routes.Scanner> {
 
@@ -129,6 +142,9 @@ fun Lissu(modifier: Modifier = Modifier) {
           },
           onNavigateToRegister = {
             backStack.add(Routes.Register)
+          },
+          onNavigateToReminders = {
+            backStack.add(Routes.Reminders)
           }
         )
       }
