@@ -32,7 +32,7 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
           onBack = { backStack.removeLastOrNull() },
           onNavigateToLogin = { backStack.add(Routes.Login) },
           onNavigateToHome = { backStack.add(Routes.Home) },
-          onNavigateToAddList = { backStack.add(Routes.AddList) },
+          onNavigateToAddList = { backStack.add(Routes.AddList()) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) }
         )
@@ -46,23 +46,26 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
             backStack.add(Routes.Account)
           },
           onNavigateToHome = { backStack.add(Routes.Home) },
-          onNavigateToAddList = { backStack.add(Routes.AddList) },
+          onNavigateToAddList = { backStack.add(Routes.AddList()) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) }
         )
       }
       entry<Routes.Home> {
         HomeScreen(
-          onNavigateToHome = {},
-          onNavigateToAddList = { backStack.add(Routes.AddList) },
+
+          onNavigateToHome = { },
+          onNavigateToAddList = { id -> backStack.add(Routes.AddList(id)) },
+
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) },
           onNavigateToAddReminder = { backStack.add(Routes.AddReminder) },
           onNavigateToReminders = { backStack.add(Routes.Reminders) }
         )
       }
-      entry<Routes.AddList> {
+      entry<Routes.AddList> { key ->
         AddListScreen(
+          listId = key.id,
           onNavigateToHome = { backStack.add(Routes.Home) },
           onNavigateToAddList = { },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
@@ -102,7 +105,7 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
           onLogout = { isLoggedIn = false },
           onBack = { backStack.removeLastOrNull() },
           onNavigateToHome = { backStack.add(Routes.Home) },
-          onNavigateToAddList = { backStack.add(Routes.AddList) },
+          onNavigateToAddList = { backStack.add(Routes.AddList()) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { },
           onNavigateToLogin = { backStack.add(Routes.Login) },

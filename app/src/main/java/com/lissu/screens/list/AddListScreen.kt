@@ -30,6 +30,7 @@ import com.lissu.ui.theme.PurpleGrey40
 
 @Composable
 fun AddListScreen(
+    listId: String? = null,
     viewModel: AddListViewModel = viewModel(),
     onNavigateToHome: () -> Unit,
     onNavigateToAddList: () -> Unit,
@@ -40,13 +41,17 @@ fun AddListScreen(
     var showDialog by remember { mutableStateOf(false) }
     var newItemName by remember { mutableStateOf("") }
 
+    LaunchedEffect(listId) {
+        viewModel.loadList(listId)
+    }
+
     val containerColor = if (isDark) Color(0xFF2D1F35) else Color(0xFFE1D5E7)
     val borderColor = if (isDark) Lissu_Purple2 else Color(0xFF9E86B9)
     val titleColor = if (isDark) Color.White else Color.Black
 
     AppScaffold(
         title = "Usuario1",
-        currentScreen = Routes.AddList,
+        currentScreen = Routes.AddList(),
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
@@ -62,7 +67,7 @@ fun AddListScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .border(2.dp, borderColor, RoundedCornerShape(10.dp)),
+                    .border(2.dp, borderColor, RoundedCornerShape(8.dp)),
                 color = containerColor,
                 shape = RoundedCornerShape(8.dp)
             ) {
@@ -96,22 +101,23 @@ fun AddListScreen(
                     ) {
                         Button(
                             onClick = { onNavigateToHome() },
-                            modifier = Modifier.weight(0.7f).height(60.dp),
+                            modifier = Modifier.weight(0.25f).height(60.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(14.dp),
+                            contentPadding = PaddingValues(0.dp)
                         ) {
-                            Icon(Icons.Default.Save, null, modifier = Modifier.size(20.dp))
-                            Spacer(Modifier.width(8.dp))
-                            Text("Guardar Lista", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Icon(Icons.Default.Save, "Guardar", modifier = Modifier.size(32.dp))
                         }
 
                         Button(
                             onClick = { showDialog = true },
-                            modifier = Modifier.weight(0.3f).height(60.dp),
+                            modifier = Modifier.weight(0.75f).height(60.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple2),
                             shape = RoundedCornerShape(14.dp)
                         ) {
                             Icon(Icons.Default.Add, "Agregar", modifier = Modifier.size(32.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("Añadir", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
                         }
                     }
                 }
