@@ -53,10 +53,8 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
       }
       entry<Routes.Home> {
         HomeScreen(
-
           onNavigateToHome = { },
           onNavigateToAddList = { id -> backStack.add(Routes.AddList(id)) },
-
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) },
           onNavigateToAddReminder = { backStack.add(Routes.AddReminder) },
@@ -76,7 +74,7 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
         AddReminderScreen(
           onBack = { backStack.removeLastOrNull() },
           onNavigateToHome = { backStack.add(Routes.Home) },
-          onNavigateToAddList = { backStack.add(Routes.AddList) },
+          onNavigateToAddList = { backStack.add(Routes.AddList()) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) },
           onNavigateToReminders = { backStack.add(Routes.Reminders) },
@@ -87,7 +85,7 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
         RemindersScreen(
           onBack = { backStack.removeLastOrNull() },
           onNavigateToHome = { backStack.add(Routes.Home) },
-          onNavigateToAddList = { backStack.add(Routes.AddList) },
+          onNavigateToAddList = { backStack.add(Routes.AddList()) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) },
           context = context
