@@ -47,8 +47,10 @@ fun AppScaffold(
   onNavigateToAddList: () -> Unit = {},
   onNavigateToMaps: () -> Unit = {},
   onNavigateToAccount: () -> Unit = {},
+  onNavigateToReminders: () -> Unit = {},
 
   content: @Composable (PaddingValues) -> Unit
+
 ) {
   val isDark = isSystemInDarkTheme()
 
@@ -84,7 +86,7 @@ fun AppScaffold(
           },
           actions = {
             Box {
-              IconButton(onClick = { }) {
+              IconButton(onClick = onNavigateToReminders) {
                 Icon(Icons.Outlined.Notifications, "Notificaciones", tint = Color.White)
               }
               Box(
@@ -168,5 +170,14 @@ fun BottomBarButton(
       )
       Text(text, fontSize = 12.sp)
     }
+  }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode", showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light Mode", showBackground = true)
+@Composable
+fun AppScaffoldPreview() {
+  AppScaffold(title = "Usuario1", currentScreen = Routes.Home) { innerPadding ->
+    Text("Test", modifier = Modifier.padding(innerPadding))
   }
 }

@@ -29,15 +29,15 @@ import com.lissu.R
 import com.lissu.Routes
 import com.lissu.data.ShoppingList
 import com.lissu.ui.theme.Lissu_Purple
-import com.lissu.ui.theme.Lissu_Purple2
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel(),
-    onNavigateToHome: () -> Unit,
-    onNavigateToAddList: (String?) -> Unit,
-    onNavigateToMaps: () -> Unit,
-    onNavigateToAccount: () -> Unit,
+  viewModel: HomeViewModel = viewModel(),
+  onNavigateToHome: () -> Unit,
+  onNavigateToAddList: () -> Unit,
+  onNavigateToMaps: () -> Unit,
+  onNavigateToAccount: () -> Unit,
+  onNavigateToAddList: (String?) -> Unit,
 ) {
     val isDark = isSystemInDarkTheme()
     val shoppingLists by viewModel.shoppingLists.collectAsState()
@@ -48,7 +48,8 @@ fun HomeScreen(
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = { onNavigateToAddList(null) },
         onNavigateToMaps = onNavigateToMaps,
-        onNavigateToAccount = onNavigateToAccount
+        onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -62,6 +63,21 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 16.dp, start = 8.dp)
             )
+          Image(
+            painterResource(R.drawable.add_list),
+            contentDescription = "Listas",
+            colorFilter = ColorFilter.tint(Color.Gray),
+            modifier = Modifier.size(80.dp)
+          )
+          Spacer(Modifier.height(32.dp))
+          Text(
+            text = "Tus listas de compras aparecerán aqui",
+            color = Color.Gray,
+            fontWeight = FontWeight.Bold
+          )
+        }
+      } else {
+        LazyColumn(modifier = Modifier.weight(1f)) {
 
             if (shoppingLists.isEmpty()) {
                 Column(
@@ -175,6 +191,49 @@ fun HomeScreen(
                     Text("Escanear código de barras", fontSize = 12.sp)
                 }
             }
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+      ) {
+        // Agregar recordatorio //
+        Surface(
+          modifier = Modifier.weight(1f)
+            .clickable { onNavigateToAddReminder() },
+          color = Lissu_Purple,
+          contentColor = Color.White,
+          shape = RoundedCornerShape(16.dp)
+        ) {
+          Column(
+            modifier = Modifier.padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Image(
+              painterResource(R.drawable.add_notif),
+              contentDescription = "Recordatorio",
+              modifier = Modifier.size(32.dp)
+            )
+            Text("Agregar recordatorio", fontSize = 12.sp)
+          }
+        }
+        // Agregar producto //
+        Surface(
+          modifier = Modifier.weight(1f)
+            .clickable {  },
+          color = Lissu_Purple,
+          contentColor = Color.White,
+          shape = RoundedCornerShape(16.dp)
+        ) {
+          Column(
+            modifier = Modifier.padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Image(
+              painterResource(R.drawable.add_cart),
+              contentDescription = "Producto",
+              modifier = Modifier.size(32.dp)
+            )
+            Text("Agregar producto", fontSize = 12.sp)
+          }
         }
     }
 }
@@ -284,6 +343,8 @@ fun HomePreview() {
         onNavigateToHome = {},
         onNavigateToAddList = {},
         onNavigateToMaps = {},
-        onNavigateToAccount = {}
+        onNavigateToAccount = {},
+        onNavigateToAddReminder = {},
+        onNavigateToReminders = {}
     )
 }

@@ -41,7 +41,8 @@ fun AccountScreen(
     onNavigateToMaps: () -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
     onNavigateToLogin: () -> Unit = {},
-    onNavigateToRegister: () -> Unit = {}
+    onNavigateToRegister: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {}
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val isDark = isSystemInDarkTheme()
@@ -53,6 +54,7 @@ fun AccountScreen(
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerPadding ->
         Column(
             modifier = Modifier
