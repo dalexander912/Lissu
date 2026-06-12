@@ -33,7 +33,6 @@ import com.lissu.AppScaffold
 import com.lissu.R
 import com.lissu.Routes
 import com.lissu.ui.theme.Lissu_Purple
-import com.lissu.ui.theme.Lissu_Purple2
 
 @Composable
 fun HomeScreen(
@@ -42,6 +41,8 @@ fun HomeScreen(
   onNavigateToAddList: () -> Unit,
   onNavigateToMaps: () -> Unit,
   onNavigateToAccount: () -> Unit,
+  onNavigateToAddReminder: () -> Unit,
+  onNavigateToReminders: () -> Unit
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists = emptyList<Any>()
@@ -52,7 +53,8 @@ fun HomeScreen(
     onNavigateToHome = onNavigateToHome,
     onNavigateToAddList = onNavigateToAddList,
     onNavigateToMaps = onNavigateToMaps,
-    onNavigateToAccount = onNavigateToAccount
+    onNavigateToAccount = onNavigateToAccount,
+    onNavigateToReminders = onNavigateToReminders
   ) { innerPadding ->
     Column(
       modifier = Modifier.padding(innerPadding)
@@ -70,13 +72,13 @@ fun HomeScreen(
           Image(
             painterResource(R.drawable.add_list),
             contentDescription = "Listas",
-            colorFilter = ColorFilter.tint(if(isDark) Color.DarkGray else Color.LightGray),
+            colorFilter = ColorFilter.tint(Color.Gray),
             modifier = Modifier.size(80.dp)
           )
           Spacer(Modifier.height(32.dp))
           Text(
             text = "Tus listas de compras aparecerán aqui",
-            color = if(isDark) Color.DarkGray else Color.LightGray,
+            color = Color.Gray,
             fontWeight = FontWeight.Bold
           )
         }
@@ -97,8 +99,8 @@ fun HomeScreen(
         // Agregar recordatorio //
         Surface(
           modifier = Modifier.weight(1f)
-            .clickable {  },
-          color = if(isDark) Lissu_Purple else Lissu_Purple2,
+            .clickable { onNavigateToAddReminder() },
+          color = Lissu_Purple,
           contentColor = Color.White,
           shape = RoundedCornerShape(16.dp)
         ) {
@@ -118,7 +120,7 @@ fun HomeScreen(
         Surface(
           modifier = Modifier.weight(1f)
             .clickable {  },
-          color = if(isDark) Lissu_Purple else Lissu_Purple2,
+          color = Lissu_Purple,
           contentColor = Color.White,
           shape = RoundedCornerShape(16.dp)
         ) {
@@ -141,7 +143,7 @@ fun HomeScreen(
       Surface(
         modifier = Modifier.fillMaxWidth()
           .clickable {  },
-        color = if(isDark) Lissu_Purple else Lissu_Purple2,
+        color = Lissu_Purple,
         contentColor = Color.White,
         shape = RoundedCornerShape(16.dp)
       ) {
@@ -170,6 +172,8 @@ fun HomePreview() {
     onNavigateToHome = {},
     onNavigateToAddList = {},
     onNavigateToMaps = {},
-    onNavigateToAccount = {}
+    onNavigateToAccount = {},
+    onNavigateToAddReminder = {},
+    onNavigateToReminders = {}
   )
 }
