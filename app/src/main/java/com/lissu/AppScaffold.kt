@@ -113,7 +113,7 @@ fun AppScaffold(
               horizontalArrangement = Arrangement.SpaceAround
             ) {
               BottomBarButton(onNavigateToHome, R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
-              BottomBarButton(onNavigateToAddList, R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
+              BottomBarButton(onNavigateToAddList, R.drawable.add_list, "Agregar", Routes.AddList(), currentScreen, isDark)
               BottomBarButton(onNavigateToMaps, R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
               BottomBarButton(onNavigateToAccount, R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
             }
@@ -135,11 +135,16 @@ fun BottomBarButton(
   currentScreen: Routes,
   isDark: Boolean
 ) {
+  val isSelected = when {
+    currentScreen is Routes.AddList && screen is Routes.AddList -> true
+    else -> currentScreen == screen
+  }
+
   Card(
     modifier = Modifier.clickable { onClick() }
       .width(70.dp)
       .drawBehind {
-        if(currentScreen == screen) {
+        if(isSelected) {
           drawRoundRect(
             color = if(isDark) Lissu_Purple2 else Lissu_DarkPurple,
             alpha = if(isDark) 0.3f else 0.1f,

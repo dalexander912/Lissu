@@ -30,6 +30,7 @@ import com.lissu.ui.theme.PurpleGrey40
 
 @Composable
 fun AddListScreen(
+    listId: String? = null,
     viewModel: AddListViewModel = viewModel(),
     onNavigateToHome: () -> Unit,
     onNavigateToAddList: () -> Unit,
@@ -40,13 +41,17 @@ fun AddListScreen(
     var showDialog by remember { mutableStateOf(false) }
     var newItemName by remember { mutableStateOf("") }
 
+    LaunchedEffect(listId) {
+        viewModel.loadList(listId)
+    }
+
     val containerColor = if (isDark) Color(0xFF2D1F35) else Color(0xFFE1D5E7)
     val borderColor = if (isDark) Lissu_Purple2 else Color(0xFF9E86B9)
     val titleColor = if (isDark) Color.White else Color.Black
 
     AppScaffold(
         title = "Usuario1",
-        currentScreen = Routes.AddList,
+        currentScreen = Routes.AddList(),
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
@@ -101,9 +106,7 @@ fun AddListScreen(
                             shape = RoundedCornerShape(14.dp),
                             contentPadding = PaddingValues(0.dp)
                         ) {
-
                             Icon(Icons.Default.Save, "Guardar", modifier = Modifier.size(32.dp))
-
                         }
 
                         Button(
