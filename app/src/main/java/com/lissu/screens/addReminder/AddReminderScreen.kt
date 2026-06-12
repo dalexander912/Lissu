@@ -1,6 +1,6 @@
 package com.lissu.screens.addReminder
 
-import android.content.res.Configuration
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -19,72 +19,92 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
 import com.lissu.R
 import com.lissu.Routes
-import com.lissu.data.dummy.dummyReminders
-import com.lissu.ui.theme.Lissu_DarkPurple
-import com.lissu.ui.theme.Lissu_LightDarkPurple
+import com.lissu.data.models.Reminder
 import com.lissu.ui.theme.Lissu_LightPurple
-import com.lissu.ui.theme.Lissu_Purple
 import com.lissu.ui.theme.Lissu_Purple2
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddReminderScreen(
-  viewModel: AddReminderViewModel = viewModel(),
+  viewModel: AddReminderViewModel = viewModel(factory = AddReminderViewModel.Factory),
   onBack: () -> Unit,
   onNavigateToHome: () -> Unit,
   onNavigateToAddList: () -> Unit,
   onNavigateToMaps: () -> Unit,
   onNavigateToAccount: () -> Unit,
+  onNavigateToReminders: () -> Unit,
+  context: Context
 ) {
   val isDark = isSystemInDarkTheme()
 
-  // Usando recordatorios dummy por ahora para testing
-  val reminders = dummyReminders
+  val reminders by viewModel.reminders.collectAsStateWithLifecycle()
+
+  val snackbarHostState = remember { SnackbarHostState() }
+  val scope = rememberCoroutineScope()
+  val onCreatedSnackbar: () -> Unit = {
+    scope.launch {
+      snackbarHostState.showSnackbar("Recordatorio creado exitosamente!")
+    }
+  }
 
   var product by rememberSaveable { mutableStateOf("") }
   var daysInput by rememberSaveable { mutableStateOf("") }
   val days = daysInput.toIntOrNull() ?: 0
   val isInputValid = ( product.isNotBlank() && days > 0 )
 
+  fun createReminder() {
+    viewModel.addReminder(
+      reminder = Reminder(product = product, intervalDays = days),
+      context = context
+    )
+    onCreatedSnackbar()
+    product = ""
+    daysInput = ""
+  }
+
   AppScaffold(
     title = "Recordatorio",
     currentScreen = Routes.AddReminder,
     onBack = onBack,
+    snackbarHostState = snackbarHostState,
     onNavigateToHome = onNavigateToHome,
     onNavigateToAddList = onNavigateToAddList,
     onNavigateToMaps = onNavigateToMaps,
-    onNavigateToAccount = onNavigateToAccount
+    onNavigateToAccount = onNavigateToAccount,
+    onNavigateToReminders = onNavigateToReminders
   ) { innerPadding ->
     Column(
-      modifier = Modifier.padding(innerPadding)
+      modifier = Modifier
+        .padding(innerPadding)
         .padding(vertical = 4.dp, horizontal = 16.dp)
         .verticalScroll(rememberScrollState())
     ) {
@@ -96,7 +116,7 @@ fun AddReminderScreen(
       Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-          containerColor = Lissu_LightDarkPurple, contentColor = Color.White
+          containerColor = MaterialTheme.colorScheme.primary, contentColor = Color.White
         )
       ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -118,12 +138,14 @@ fun AddReminderScreen(
             shape = RoundedCornerShape(12.dp),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
+              unfocusedTextColor = Color.White,
+              focusedTextColor = Color.White,
               unfocusedBorderColor = Lissu_Purple2,
               focusedBorderColor = Color.White,
-              unfocusedPlaceholderColor = Lissu_LightPurple,
+              unfocusedPlaceholderColor = Lissu_Purple2,
               focusedPlaceholderColor = Color.Transparent,
               cursorColor = Color.White,
-              selectionColors = TextSelectionColors(Color.White, Lissu_Purple)
+              selectionColors = TextSelectionColors(Color.White, Lissu_Purple2)
             )
           )
 
@@ -142,12 +164,14 @@ fun AddReminderScreen(
               keyboardType = KeyboardType.Number
             ),
             colors = OutlinedTextFieldDefaults.colors(
+              unfocusedTextColor = Color.White,
+              focusedTextColor = Color.White,
               unfocusedBorderColor = Lissu_Purple2,
               focusedBorderColor = Color.White,
-              unfocusedPlaceholderColor = Lissu_LightPurple,
+              unfocusedPlaceholderColor = Lissu_Purple2,
               focusedPlaceholderColor = Color.Transparent,
               cursorColor = Color.White,
-              selectionColors = TextSelectionColors(Color.White, Lissu_Purple)
+              selectionColors = TextSelectionColors(Color.White, Lissu_Purple2)
             )
           )
 
@@ -156,31 +180,32 @@ fun AddReminderScreen(
           Text(
             text = "Lissu te recordará periodicamente que debes comprar este producto luego del lapso de tiempo establecido.",
             fontSize = 12.sp,
-            color = Lissu_Purple2,
+            color = Lissu_LightPurple,
             lineHeight = 16.sp
           )
           Spacer(Modifier.height(8.dp))
           Text(
             text = "Una vez creado el recordatorio podrás desactivar o activar las notificaciones en cualquier momento.",
             fontSize = 12.sp,
-            color = Lissu_Purple2,
+            color = Lissu_LightPurple,
             lineHeight = 16.sp
           )
 
           Spacer(Modifier.height(24.dp))
 
           Button(
-            onClick = {  },
+            onClick = { createReminder() },
             modifier = Modifier.fillMaxWidth(),
             enabled = isInputValid,
             colors = ButtonDefaults.buttonColors(
-              containerColor = Lissu_Purple2
+              containerColor = Lissu_Purple2,
+              disabledContentColor = if(isDark) Color.Unspecified else Lissu_Purple2
             )
           ) { Text(text = "Agregar", fontWeight = FontWeight.Bold) }
         }
       }
 
-      HorizontalDivider(modifier = Modifier.padding(top = 32.dp, bottom = 32.dp))
+      HorizontalDivider(modifier = Modifier.padding(vertical = 32.dp))
 
       Text(
         text = "Recordatorios creados",
@@ -198,9 +223,13 @@ fun AddReminderScreen(
         )
       } else {
         for(reminder in reminders) {
+
           val days = reminder.intervalDays
+
           Card(modifier = Modifier.fillMaxWidth()) {
-            Row(modifier = Modifier.fillMaxWidth().padding(12.dp)) {
+            Row(modifier = Modifier
+              .fillMaxWidth()
+              .padding(12.dp)) {
               Text(
                 text = reminder.product,
                 fontSize = 12.sp,
@@ -221,16 +250,4 @@ fun AddReminderScreen(
       }
     }
   }
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
-@Composable
-fun AddReminderPreview() {
-  AddReminderScreen(
-    onBack = {},
-    onNavigateToHome = {},
-    onNavigateToAddList = {},
-    onNavigateToMaps = {},
-    onNavigateToAccount = {}
-  )
 }

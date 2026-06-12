@@ -1,8 +1,8 @@
 package com.lissu.data.dummy
 
-import com.lissu.models.Reminder
+import com.lissu.data.models.Reminder
 
-// Recordatorios dummy para testing
+// Recordatorios dummy para testing (sin usar por ahora)
 var dummyReminders = listOf(
   Reminder(1, "Tomates", 3),
   Reminder(2, "Pan", 1),

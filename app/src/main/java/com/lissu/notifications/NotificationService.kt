@@ -3,7 +3,9 @@ package com.lissu.notifications
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.lissu.R
+import com.lissu.ui.theme.Lissu_Purple
 
 class NotificationService(
   private val context: Context
@@ -23,6 +25,7 @@ class NotificationService(
       .setStyle(NotificationCompat.BigTextStyle()
         .bigText(message))
       .setSmallIcon(R.drawable.ic_notification)
+      .setColor(ContextCompat.getColor(context, R.color.Lissu_Purple))
       .setPriority(NotificationCompat.PRIORITY_HIGH)
       .setAutoCancel(true)
 

@@ -21,10 +21,6 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,20 +28,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lissu.data.models.Reminder
-import com.lissu.notifications.cancelReminder
-import com.lissu.notifications.scheduleReminder
+import com.lissu.screens.reminders.RemindersViewModel
 import com.lissu.ui.theme.Lissu_DarkPurple
 import com.lissu.ui.theme.Lissu_LightPurple
 
 @Composable
 fun ReminderCard(
   reminder: Reminder,
+  viewModel: RemindersViewModel,
   onDelete: () -> Unit,
   context: Context
 ) {
   val isDark = isSystemInDarkTheme()
 
-  var isEnabled by rememberSaveable { mutableStateOf(false) }
   val days = reminder.intervalDays
 
   Card(
@@ -78,8 +73,10 @@ fun ReminderCard(
         )
         Spacer(Modifier.width(8.dp))
         Switch(
-          checked = isEnabled,
-          onCheckedChange = { isEnabled = it },
+          checked = reminder.isEnabled,
+          onCheckedChange = { isChecked ->
+            viewModel.updateReminder(reminder, isChecked, context)
+          },
           colors = SwitchDefaults.colors(
             checkedThumbColor = if(isDark) Lissu_DarkPurple else Lissu_LightPurple,
             checkedTrackColor = if(isDark) Lissu_LightPurple else Lissu_DarkPurple
@@ -100,11 +97,5 @@ fun ReminderCard(
         )
       }
     }
-  }
-
-  if(isEnabled) {
-    scheduleReminder(reminder, context)
-  } else {
-    cancelReminder(reminder.id, context)
   }
 }

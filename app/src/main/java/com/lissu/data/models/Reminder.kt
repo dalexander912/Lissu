@@ -1,7 +1,8 @@
-package com.lissu.models
+package com.lissu.data.models
 
 data class Reminder(
-  val id: Int, //Random.Default.nextInt()
+  val id: Int = 0,
   val product: String,
-  val intervalDays: Int
+  val intervalDays: Int,
+  val isEnabled: Boolean = true
 )

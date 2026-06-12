@@ -101,7 +101,8 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
           onNavigateToAddList = { backStack.add(Routes.AddList) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) },
-          onNavigateToReminders = { backStack.add(Routes.Reminders) }
+          onNavigateToReminders = { backStack.add(Routes.Reminders) },
+          context = context
         )
       }
       entry<Routes.Reminders> {

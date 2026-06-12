@@ -7,7 +7,7 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.lissu.models.Reminder
+import com.lissu.data.models.Reminder
 import java.util.concurrent.TimeUnit
 
 class NotificationWorker(
@@ -38,7 +38,7 @@ fun scheduleReminder(
       workDataOf(
         "id" to reminder.id,
         "product" to reminder.product,
-        "intervalDays" to reminder.intervalDays
+        "intervalDays" to reminder.intervalDays.toString()
       )
     )
     .build()
