@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.lissu.data.model.Item
+import com.lissu.data.models.Item
+
 data class ScannerUiState(
     val barcode: String = "",
     val scannedItem: Item? = null,

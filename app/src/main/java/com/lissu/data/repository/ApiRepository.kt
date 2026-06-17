@@ -3,7 +3,7 @@ package com.lissu.data.repository
 import com.lissu.data.api.KtorClient
 import com.lissu.data.api.items.ItemResponseDTO
 import com.lissu.data.api.items.toModel
-import com.lissu.data.model.Item
+import com.lissu.data.models.Item
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
