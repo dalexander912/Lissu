@@ -4,7 +4,7 @@ data class Item(
     val id: String,
     val name: String,
     val isChecked: Boolean = false,
-    val category: String,
-    val imageUrl: String,
-    val brand: String
+    val category: String? = null,
+    val imageUrl: String? = null,
+    val brand: String? = null
 )
