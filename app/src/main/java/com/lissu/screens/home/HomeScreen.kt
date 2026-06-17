@@ -210,13 +210,13 @@ fun ShoppingListCard(
       Column(modifier = Modifier.weight(1f)) {
         Text(
           text = list.name,
-          fontSize = 20.sp,
+          fontSize = 17.sp,
           fontWeight = FontWeight.Bold,
           color = contentColor
         )
         Text(
           text = "${list.items.size} artículos",
-          fontSize = 14.sp,
+          fontSize = 12.sp,
           color = contentColor.copy(alpha = 0.7f),
           fontWeight = FontWeight.Medium
         )

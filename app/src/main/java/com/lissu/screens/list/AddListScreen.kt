@@ -66,15 +66,15 @@ fun AddListScreen(
         ) {
             Surface(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .border(2.dp, borderColor, RoundedCornerShape(8.dp)),
+                    .fillMaxSize(),
+                    
                 color = containerColor,
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
                         text = viewModel.listName,
-                        fontSize = 32.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = titleColor,
                         modifier = Modifier.padding(bottom = 16.dp)
