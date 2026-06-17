@@ -11,8 +11,24 @@ import java.util.UUID
 object ShoppingListRepository {
     private val _shoppingLists = MutableStateFlow<List<ShoppingList>>(
         listOf(
-            ShoppingList("1", "Lista 1", listOf(Item("1", "Lechuga"))),
-            ShoppingList("2", "Lista 2", listOf(Item("7", "Arroz")))
+            ShoppingList(
+                "1", "Lista 1", listOf(
+                    Item("1", "Lechuga"),
+                    Item("2", "Tomate"),
+                    Item("3", "Huevos"),
+                    Item("4", "Pan"),
+                    Item("5", "Leche"),
+                    Item("6", "Queso")
+                )
+            ),
+            ShoppingList(
+                "2", "Lista 2", listOf(
+                    Item("7", "Arroz"),
+                    Item("8", "Frijoles"),
+                    Item("9", "Café"),
+                    Item("10", "Leche")
+                )
+            )
         )
     )
     val shoppingLists: StateFlow<List<ShoppingList>> = _shoppingLists.asStateFlow()
@@ -27,6 +43,12 @@ object ShoppingListRepository {
                     list
                 }
             }
+        }
+    }
+
+    fun deleteList(listId: String) {
+        _shoppingLists.update { currentLists ->
+            currentLists.filter { it.id != listId }
         }
     }
 }

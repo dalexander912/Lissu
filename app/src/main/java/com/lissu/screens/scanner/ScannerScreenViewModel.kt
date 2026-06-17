@@ -75,7 +75,7 @@ class ScannerScreenViewModel() : ViewModel() {
         _uiState.value = ScannerUiState()
     }
 
-    // Función para abrir el selector
+
     fun onShowListSelector() {
         viewModelScope.launch {
             ShoppingListRepository.shoppingLists.collect { lists ->
@@ -88,12 +88,12 @@ class ScannerScreenViewModel() : ViewModel() {
         _uiState.update { it.copy(showListSelector = false) }
     }
 
-    // Función que agrega solo el nombre
+
     fun addItemToList(listId: String) {
         val itemName = _uiState.value.scannedItem?.name ?: return
         ShoppingListRepository.addItemToList(listId, itemName)
 
-        // Limpiamos el estado tras añadir
+
         _uiState.update { it.copy(showListSelector = false, scanned = false, scannedItem = null) }
     }
 }

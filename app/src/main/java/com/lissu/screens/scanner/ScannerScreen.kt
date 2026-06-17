@@ -119,6 +119,13 @@ fun ScannerScreen(onBack: () -> Unit) {
                             label = { Text("Categoría") },
                             modifier = Modifier.fillMaxWidth()
                         )
+                        Button(
+                            onClick = viewModel::onShowListSelector,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                        ) {
+                            Text("Añadir a lista")
+                        }
                     }
 
                     uiState.error?.let { msg ->
@@ -131,6 +138,30 @@ fun ScannerScreen(onBack: () -> Unit) {
                     ) {
                         Text("Escanear otro ítem")
                     }
+
+                    // Dialogo para seleccionar la lista
+                    if (uiState.showListSelector) {
+                        AlertDialog(
+                            onDismissRequest = viewModel::onDismissListSelector,
+                            title = { Text("Selecciona una lista") },
+                            text = {
+                                Column {
+                                    uiState.shoppingLists.forEach { list ->
+                                        TextButton(
+                                            onClick = { viewModel.addItemToList(list.id) },
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+                                            Text(list.name, style = MaterialTheme.typography.bodyLarge)
+                                        }
+                                    }
+                                }
+                            },
+                            confirmButton = {
+                                TextButton(onClick = viewModel::onDismissListSelector) { Text("Cancelar") }
+                            }
+                        )
+                    }
+
                 }
             }
         }
