@@ -29,7 +29,7 @@ import com.lissu.Routes
 
 @Composable
 fun ScannerScreen(onBack: () -> Unit) {
-    val viewModel: ScannerScreenViewModel = viewModel()
+    val viewModel: ScannerScreenViewModel = viewModel(factory = ScannerScreenViewModel.Factory)
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 

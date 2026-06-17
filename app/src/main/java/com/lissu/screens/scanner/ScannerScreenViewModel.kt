@@ -1,7 +1,11 @@
 package com.lissu.screens.scanner
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.lissu.LissuApplication
 import com.lissu.data.api.KtorClient
 import com.lissu.data.repositories.ApiRepository
 import com.lissu.data.repositories.ItemInterface
@@ -12,7 +16,7 @@ import kotlinx.coroutines.launch
 import com.lissu.data.models.Item
 import com.lissu.data.repositories.ShoppingListRepository
 import com.lissu.data.models.ShoppingList
-
+import java.util.UUID
 data class ScannerUiState(
     val barcode: String = "",
     val scannedItem: Item? = null,
@@ -23,7 +27,9 @@ data class ScannerUiState(
     val shoppingLists: List<ShoppingList> = emptyList()
 )
 
-class ScannerScreenViewModel() : ViewModel() {
+class ScannerScreenViewModel(
+    private val shoppingListRepository: ShoppingListRepository
+) : ViewModel() {
 
     private val repository: ItemInterface = ApiRepository(KtorClient.client)
 
@@ -78,7 +84,7 @@ class ScannerScreenViewModel() : ViewModel() {
 
     fun onShowListSelector() {
         viewModelScope.launch {
-            ShoppingListRepository.shoppingLists.collect { lists ->
+            shoppingListRepository.getShoppingListsWithItems().collect { lists ->
                 _uiState.update { it.copy(showListSelector = true, shoppingLists = lists) }
             }
         }
@@ -90,10 +96,23 @@ class ScannerScreenViewModel() : ViewModel() {
 
 
     fun addItemToList(listId: String) {
-        val itemName = _uiState.value.scannedItem?.name ?: return
-        ShoppingListRepository.addItemToList(listId, itemName)
+        val scannedItem = _uiState.value.scannedItem ?: return
 
+        viewModelScope.launch {
 
-        _uiState.update { it.copy(showListSelector = false, scanned = false, scannedItem = null) }
+            val itemToSave = scannedItem.copy(id = UUID.randomUUID().toString())
+            shoppingListRepository.addItemToList(listId, itemToSave)
+
+            _uiState.update { it.copy(showListSelector = false, scanned = false, scannedItem = null) }
+        }
+    }
+
+    companion object {
+        val Factory = viewModelFactory {
+            initializer {
+                val app = this[APPLICATION_KEY] as LissuApplication
+                ScannerScreenViewModel(app.appProvider.provideShoppingListRepository())
+            }
+        }
     }
 }
