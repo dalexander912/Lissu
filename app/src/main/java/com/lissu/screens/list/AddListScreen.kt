@@ -188,8 +188,8 @@ fun ShoppingItemRow(
             Text(
                 text = item.name,
                 modifier = Modifier.weight(1f).clickable { onToggle() },
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
                 color = textColor
             )
             IconButton(onClick = onRemove) {

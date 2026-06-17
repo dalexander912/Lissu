@@ -62,7 +62,7 @@ fun HomeScreen(
       // LISTAS //
       Text(
         "Tus listas",
-        fontSize = 24.sp,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(bottom = 16.dp, start = 8.dp)
       )
