@@ -21,6 +21,14 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+    externalNativeBuild {
+      cmake {
+        //alinear el código nativo a 16 KB
+        arguments ("-DANDROID_ALIGN_16KB=ON")
+      }
+    }
+
   }
 
   buildTypes {
@@ -36,6 +44,14 @@ android {
   buildFeatures {
     compose = true
   }
+
+  packaging {
+    jniLibs {
+      useLegacyPackaging = false
+    }
+  }
+
+
 }
 
 dependencies {
@@ -77,4 +93,11 @@ dependencies {
 
   // WorkManager: programación de notificaciones
   implementation(libs.work.runtime.ktx)
+  // CameraX
+  implementation(libs.androidx.camera.camera2)
+  implementation(libs.androidx.camera.lifecycle)
+  implementation(libs.androidx.camera.view)
+
+  // ML Kit barcode
+  implementation(libs.mlkit.barcode.scanning)
 }

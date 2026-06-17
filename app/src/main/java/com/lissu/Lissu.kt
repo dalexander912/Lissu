@@ -17,6 +17,7 @@ import com.lissu.screens.list.AddListScreen
 import com.lissu.screens.login.LoginScreen
 import com.lissu.screens.register.RegisterScreen
 import com.lissu.screens.reminders.RemindersScreen
+import com.lissu.screens.scanner.ScannerScreen
 
 @Composable
 fun Lissu(modifier: Modifier = Modifier, context: Context) {
@@ -53,12 +54,16 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
       }
       entry<Routes.Home> {
         HomeScreen(
+
           onNavigateToHome = { },
           onNavigateToAddList = { id -> backStack.add(Routes.AddList(id)) },
           onNavigateToMaps = { backStack.add(Routes.Maps) },
           onNavigateToAccount = { backStack.add(Routes.Account) },
           onNavigateToAddReminder = { backStack.add(Routes.AddReminder) },
-          onNavigateToReminders = { backStack.add(Routes.Reminders) }
+          onNavigateToReminders = { backStack.add(Routes.Reminders) },
+          onNavigateToScanner = {
+            backStack.add(Routes.Scanner)
+          }
         )
       }
       entry<Routes.AddList> { key ->
@@ -92,7 +97,9 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
         )
       }
       entry<Routes.Scanner> {
-
+        ScannerScreen(
+          onBack = { backStack.removeLastOrNull() }
+        )
       }
       entry<Routes.Maps> {
         

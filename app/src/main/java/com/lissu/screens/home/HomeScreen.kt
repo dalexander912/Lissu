@@ -40,6 +40,7 @@ fun HomeScreen(
   onNavigateToAccount: () -> Unit,
   onNavigateToAddReminder: () -> Unit,
   onNavigateToReminders: () -> Unit,
+  onNavigateToScanner: () -> Unit,
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists by viewModel.shoppingLists.collectAsState()
@@ -289,6 +290,7 @@ fun HomePreview() {
     onNavigateToMaps = {},
     onNavigateToAccount = {},
     onNavigateToAddReminder = {},
-    onNavigateToReminders = {}
+    onNavigateToReminders = {},
+    onNavigateToScanner = {}
   )
 }
