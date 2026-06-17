@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
 import com.lissu.Routes
-import com.lissu.data.Item
+import com.lissu.data.models.Item
 import com.lissu.ui.theme.Lissu_Purple
 import com.lissu.ui.theme.Lissu_Purple2
 import com.lissu.ui.theme.PurpleGrey40

@@ -1,8 +1,8 @@
 package com.lissu.screens.home
 
 import androidx.lifecycle.ViewModel
-import com.lissu.data.Item
-import com.lissu.data.ShoppingList
+import com.lissu.data.models.Item
+import com.lissu.data.models.ShoppingList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -27,7 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
 import com.lissu.R
 import com.lissu.Routes
-import com.lissu.data.ShoppingList
+import com.lissu.data.models.ShoppingList
 import com.lissu.ui.theme.Lissu_Purple
 import com.lissu.ui.theme.Lissu_Purple2
 

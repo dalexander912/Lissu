@@ -1,4 +1,4 @@
-package com.lissu.data
+package com.lissu.data.models
 
 data class ShoppingList(
     val id: String,
@@ -9,5 +9,8 @@ data class ShoppingList(
 data class Item(
     val id: String,
     val name: String,
-    val isChecked: Boolean = false
+    val isChecked: Boolean = false,
+    val category: String,
+    val imageUrl: String,
+    val brand: String
 )
