@@ -1,5 +1,5 @@
 package com.lissu.data.api.items
-import com.lissu.data.model.Item
+import com.lissu.data.models.Item
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 

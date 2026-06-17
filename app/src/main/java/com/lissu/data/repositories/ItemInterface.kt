@@ -1,6 +1,6 @@
-package com.lissu.data.repository
+package com.lissu.data.repositories
 
-import com.lissu.data.model.Item
+import com.lissu.data.models.Item
 
 interface ItemInterface {
 

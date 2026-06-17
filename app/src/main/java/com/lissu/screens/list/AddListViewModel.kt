@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.lissu.data.Item
-import com.lissu.data.ShoppingList
+import com.lissu.data.models.Item
+import com.lissu.data.models.ShoppingList
 
 class AddListViewModel : ViewModel() {
     var listName by mutableStateOf("Nueva Lista")

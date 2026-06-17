@@ -1,14 +1,15 @@
 package com.lissu.screens.scanner
 
 import android.Manifest
-import android.R.color.white
 import android.content.pm.PackageManager
-import android.graphics.Color.WHITE
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -64,7 +65,8 @@ fun ScannerScreen(onBack: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerpadding)
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
@@ -94,7 +96,7 @@ fun ScannerScreen(onBack: () -> Unit) {
                     Text("Código de barras: ${uiState.barcode}", style = MaterialTheme.typography.bodyMedium)
 
                     uiState.scannedItem?.let { item ->
-                        if (item.imageUrl.isNotEmpty()) {
+                        if (!item.imageUrl.isNullOrEmpty()) {
                             AsyncImage(
                                 model = item.imageUrl,
                                 contentDescription = "Imagen del item",
@@ -114,11 +116,18 @@ fun ScannerScreen(onBack: () -> Unit) {
                         )
 
                         OutlinedTextField(
-                            value = item.category,
+                            value = item.category ?: "",
                             onValueChange = viewModel::onCategoryChange,
                             label = { Text("Categoría") },
                             modifier = Modifier.fillMaxWidth()
                         )
+                        Button(
+                            onClick = viewModel::onShowListSelector,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                        ) {
+                            Text("Añadir a lista")
+                        }
                     }
 
                     uiState.error?.let { msg ->
@@ -134,5 +143,48 @@ fun ScannerScreen(onBack: () -> Unit) {
                 }
             }
         }
+    }
+
+    if (uiState.showListSelector) {
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissListSelector,
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            textContentColor = MaterialTheme.colorScheme.onSurface,
+            title = {
+                Text(
+                    text = "Selecciona una lista",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    uiState.shoppingLists.forEach { list ->
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable { viewModel.addItemToList(list.id) },
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        ) {
+                            Text(
+                                text = list.name,
+                                modifier = Modifier.padding(16.dp),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = viewModel::onDismissListSelector) {
+                    Text("Cancelar", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        )
     }
 }

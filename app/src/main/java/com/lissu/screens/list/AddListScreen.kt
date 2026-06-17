@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
 import com.lissu.Routes
-import com.lissu.data.Item
+import com.lissu.data.models.Item
 import com.lissu.ui.theme.Lissu_Purple
 import com.lissu.ui.theme.Lissu_Purple2
 import com.lissu.ui.theme.PurpleGrey40
@@ -66,15 +66,15 @@ fun AddListScreen(
         ) {
             Surface(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .border(2.dp, borderColor, RoundedCornerShape(8.dp)),
+                    .fillMaxSize(),
+                    
                 color = containerColor,
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
                         text = viewModel.listName,
-                        fontSize = 32.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = titleColor,
                         modifier = Modifier.padding(bottom = 16.dp)
@@ -188,8 +188,8 @@ fun ShoppingItemRow(
             Text(
                 text = item.name,
                 modifier = Modifier.weight(1f).clickable { onToggle() },
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
                 color = textColor
             )
             IconButton(onClick = onRemove) {
