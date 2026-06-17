@@ -20,6 +20,10 @@ class ShoppingListRepositoryImpl(
         }
     }
 
+    override fun getShoppingListById(id: String): Flow<ShoppingList?> {
+        return shoppingListDao.getShoppingListWithItemsById(id).map { it?.toModel() }
+    }
+
     override suspend fun insertShoppingList(shoppingList: ShoppingList) {
         shoppingListDao.insertShoppingList(shoppingList.toEntity())
     }

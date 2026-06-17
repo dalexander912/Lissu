@@ -31,7 +31,7 @@ import com.lissu.ui.theme.PurpleGrey40
 @Composable
 fun AddListScreen(
     listId: String? = null,
-    viewModel: AddListViewModel = viewModel(),
+    viewModel: AddListViewModel = viewModel(factory = AddListViewModel.Factory),
     onNavigateToHome: () -> Unit,
     onNavigateToAddList: () -> Unit,
     onNavigateToMaps: () -> Unit,
@@ -100,7 +100,10 @@ fun AddListScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Button(
-                            onClick = { onNavigateToHome() },
+                            onClick = {
+                                viewModel.saveList()
+                                onNavigateToHome()
+                            },
                             modifier = Modifier.weight(0.25f).height(60.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple),
                             shape = RoundedCornerShape(14.dp),
