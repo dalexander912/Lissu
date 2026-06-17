@@ -3,8 +3,8 @@ package com.lissu.screens.scanner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lissu.data.api.KtorClient
-import com.lissu.data.repository.ApiRepository
-import com.lissu.data.repository.ItemInterface
+import com.lissu.data.repositories.ApiRepository
+import com.lissu.data.repositories.ItemInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
