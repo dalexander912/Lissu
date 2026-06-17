@@ -3,6 +3,7 @@ package com.lissu.screens.account
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -30,12 +31,6 @@ import com.lissu.Routes
 import com.lissu.ui.theme.Lissu_LightPurple
 import com.lissu.ui.theme.Lissu_Purple
 
-private val BgPage     = Color(0xFFF5F5F5)
-private val BorderColor = Color(0xFFE5E7EB)
-private val TextHint   = Color(0xFF6B7280)
-private val TextMain   = Color(0xFF111827)
-private val RedText    = Color(0xFFDC2626)
-
 @Composable
 fun AccountScreen(
     isLoggedIn: Boolean,
@@ -46,8 +41,12 @@ fun AccountScreen(
     onNavigateToMaps: () -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
     onNavigateToLogin: () -> Unit = {},
-    onNavigateToRegister: () -> Unit = {}
+    onNavigateToRegister: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {}
 ) {
+    val colorScheme = MaterialTheme.colorScheme
+    val isDark = isSystemInDarkTheme()
+
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
@@ -55,11 +54,12 @@ fun AccountScreen(
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BgPage)
+                .background(colorScheme.background)
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -67,14 +67,14 @@ fun AccountScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .background(colorScheme.surface)
                     .padding(vertical = 28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
                     modifier = Modifier
                         .size(80.dp)
-                        .background(Color(0xFFF3F4F6), CircleShape),
+                        .background(colorScheme.surfaceVariant, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
@@ -90,13 +90,13 @@ fun AccountScreen(
                     text = if (isLoggedIn) "Usuario1" else "Modo Invitado",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
-                    color = TextMain
+                    color = colorScheme.onSurface
                 )
                 if (!isLoggedIn) {
                     Text(
                         text = "Inicia sesión o registrate",
                         fontSize = 13.sp,
-                        color = TextHint,
+                        color = colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -107,7 +107,6 @@ fun AccountScreen(
             if (isLoggedIn) {
                 InfoSection(label = "Información personal") {
                     InfoRow(icon = Icons.Outlined.Person, label = "Nombre", value = "Usuario1")
-                    HorizontalDivider(color = BorderColor, thickness = 0.5.dp)
                     InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = "usuario1@email.com")
                 }
 
@@ -124,7 +123,7 @@ fun AccountScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 14.dp),
                     shape = RoundedCornerShape(12.dp),
-                    color = Color.White,
+                    color = colorScheme.surface,
                     onClick = onLogout
                 ) {
                     Row(
@@ -137,7 +136,7 @@ fun AccountScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.Logout,
                             contentDescription = null,
-                            tint = RedText,
+                            tint = Color(0xFFDC2626),
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(Modifier.width(8.dp))
@@ -145,7 +144,7 @@ fun AccountScreen(
                             text = "Cerrar sesión",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
-                            color = RedText
+                            color = Color(0xFFDC2626)
                         )
                     }
                 }
@@ -170,7 +169,7 @@ fun AccountScreen(
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(1.5.dp, Lissu_Purple),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Lissu_Purple)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = if (isDark) Color.White else Lissu_Purple)
                     ) {
                         Text(text = "Crear una cuenta", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                     }
@@ -183,18 +182,18 @@ fun AccountScreen(
 
 @Composable
 private fun InfoSection(label: String, content: @Composable ColumnScope.() -> Unit) {
+    val colorScheme = MaterialTheme.colorScheme
     Column(modifier = Modifier.padding(horizontal = 14.dp)) {
         Text(
-            text = label.uppercase(),
-            fontSize = 11.sp,
-            color = TextHint,
-            letterSpacing = 0.06.sp,
+            text = label,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            color = colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 2.dp, bottom = 6.dp)
         )
         Surface(
             shape = RoundedCornerShape(12.dp),
-            color = Color.White,
-            border = BorderStroke(0.5.dp, BorderColor)
+            color = colorScheme.surface
         ) {
             Column(modifier = Modifier.fillMaxWidth(), content = content)
         }
@@ -203,6 +202,7 @@ private fun InfoSection(label: String, content: @Composable ColumnScope.() -> Un
 
 @Composable
 private fun InfoRow(icon: ImageVector, label: String, value: String) {
+    val colorScheme = MaterialTheme.colorScheme
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -224,9 +224,9 @@ private fun InfoRow(icon: ImageVector, label: String, value: String) {
             )
         }
         Column {
-            Text(text = label, fontSize = 11.sp, color = TextHint)
+            Text(text = label, fontSize = 11.sp, color = colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(2.dp))
-            Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextMain)
+            Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = colorScheme.onSurface)
         }
     }
 }

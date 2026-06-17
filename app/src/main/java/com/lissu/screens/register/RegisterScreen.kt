@@ -1,14 +1,13 @@
 package com.lissu.screens.register
 
-import android.content.res.Configuration
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,19 +16,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lissu.AppScaffold
 import com.lissu.R
 import com.lissu.Routes
-import com.lissu.ui.theme.Lissu_DarkPurple
+import com.lissu.ui.theme.Lissu_LightDarkPurple
 import com.lissu.ui.theme.Lissu_Purple
 
 @Composable
 fun RegisterScreen(
     onBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAddList: () -> Unit = {},
+    onNavigateToMaps: () -> Unit = {},
+    onNavigateToAccount: () -> Unit = {},
 ) {
     var usuario by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
@@ -40,13 +42,17 @@ fun RegisterScreen(
         title = "Registrarse",
         currentScreen = Routes.Register,
         showTopBar = false,
-        showBottomBar = false
+        showBottomBar = true,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToAddList = onNavigateToAddList,
+        onNavigateToMaps = onNavigateToMaps,
+        onNavigateToAccount = onNavigateToAccount,
     ) { innerpadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerpadding)
-                .background(Lissu_Purple)
+                .background(Lissu_LightDarkPurple)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -77,7 +83,7 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 12.dp)
                     .background(
-                        color = Color(0xFFF5F5F5),
+                        color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(20.dp)
                     )
                     .padding(horizontal = 24.dp, vertical = 28.dp)
@@ -86,7 +92,7 @@ fun RegisterScreen(
                     text = "Regístrate para empezar\na gestionar tus compras",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Lissu_DarkPurple,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 20.dp),
@@ -99,7 +105,7 @@ fun RegisterScreen(
                     text = "Usuario",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Lissu_DarkPurple,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedTextField(
@@ -108,12 +114,6 @@ fun RegisterScreen(
                     placeholder = { Text("Crea un nombre de usuario", fontSize = 13.sp) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        unfocusedBorderColor = Color(0xFFCCCCCC),
-                        focusedBorderColor = Lissu_Purple
-                    ),
                     singleLine = true
                 )
 
@@ -124,7 +124,7 @@ fun RegisterScreen(
                     text = "Correo electrónico",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Lissu_DarkPurple,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedTextField(
@@ -133,12 +133,6 @@ fun RegisterScreen(
                     placeholder = { Text("ejemplo@correo.com", fontSize = 13.sp) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        unfocusedBorderColor = Color(0xFFCCCCCC),
-                        focusedBorderColor = Lissu_Purple
-                    ),
                     singleLine = true
                 )
 
@@ -149,7 +143,7 @@ fun RegisterScreen(
                     text = "Contraseña",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Lissu_DarkPurple,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedTextField(
@@ -159,12 +153,6 @@ fun RegisterScreen(
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        unfocusedBorderColor = Color(0xFFCCCCCC),
-                        focusedBorderColor = Lissu_Purple
-                    ),
                     singleLine = true
                 )
 
@@ -175,7 +163,7 @@ fun RegisterScreen(
                     text = "Confirmar contraseña",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Lissu_DarkPurple,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedTextField(
@@ -185,12 +173,6 @@ fun RegisterScreen(
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        unfocusedBorderColor = Color(0xFFCCCCCC),
-                        focusedBorderColor = Lissu_Purple
-                    ),
                     singleLine = true
                 )
 
@@ -203,13 +185,15 @@ fun RegisterScreen(
                         .fillMaxWidth()
                         .height(52.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Lissu_DarkPurple)
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 ) {
                     Text(
                         text = "Registrarse",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
@@ -221,35 +205,22 @@ fun RegisterScreen(
                     .padding(horizontal = 20.dp, vertical = 20.dp),
                 horizontalArrangement = Arrangement.Start
             ) {
-                Button(
+                TextButton(
                     onClick = onNavigateToLogin,
-                    modifier = Modifier.height(48.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Lissu_DarkPurple),
-                    contentPadding = PaddingValues(horizontal = 20.dp)
+                    colors = ButtonDefaults.textButtonColors(contentColor = Color.White)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                         contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = "Ya tengo cuenta",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
         }
     }
 }
-
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark Mode")
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "Light Mode")
-//@Composable
-//fun RegisterPreview() {
-//    RegisterScreen(onBack = {}, onNavigateToLogin = {})
-//}
