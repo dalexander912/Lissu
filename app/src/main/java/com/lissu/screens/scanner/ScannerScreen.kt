@@ -94,7 +94,7 @@ fun ScannerScreen(onBack: () -> Unit) {
                     Text("Código de barras: ${uiState.barcode}", style = MaterialTheme.typography.bodyMedium)
 
                     uiState.scannedItem?.let { item ->
-                        if (item.imageUrl.isNotEmpty()) {
+                        if (!item.imageUrl.isNullOrEmpty()) {
                             AsyncImage(
                                 model = item.imageUrl,
                                 contentDescription = "Imagen del item",
@@ -114,7 +114,7 @@ fun ScannerScreen(onBack: () -> Unit) {
                         )
 
                         OutlinedTextField(
-                            value = item.category,
+                            value = item.category ?: "",
                             onValueChange = viewModel::onCategoryChange,
                             label = { Text("Categoría") },
                             modifier = Modifier.fillMaxWidth()
