@@ -10,13 +10,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.lissu.data.models.Item
+import com.lissu.data.repositories.ShoppingListRepository
+import com.lissu.data.models.ShoppingList
 
 data class ScannerUiState(
     val barcode: String = "",
     val scannedItem: Item? = null,
     val isLoading: Boolean = false,
     val scanned: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val showListSelector: Boolean = false,
+    val shoppingLists: List<ShoppingList> = emptyList()
 )
 
 class ScannerScreenViewModel() : ViewModel() {
@@ -69,5 +73,27 @@ class ScannerScreenViewModel() : ViewModel() {
 
     fun resetScan() {
         _uiState.value = ScannerUiState()
+    }
+
+    // Función para abrir el selector
+    fun onShowListSelector() {
+        viewModelScope.launch {
+            ShoppingListRepository.shoppingLists.collect { lists ->
+                _uiState.update { it.copy(showListSelector = true, shoppingLists = lists) }
+            }
+        }
+    }
+
+    fun onDismissListSelector() {
+        _uiState.update { it.copy(showListSelector = false) }
+    }
+
+    // Función que agrega solo el nombre
+    fun addItemToList(listId: String) {
+        val itemName = _uiState.value.scannedItem?.name ?: return
+        ShoppingListRepository.addItemToList(listId, itemName)
+
+        // Limpiamos el estado tras añadir
+        _uiState.update { it.copy(showListSelector = false, scanned = false, scannedItem = null) }
     }
 }

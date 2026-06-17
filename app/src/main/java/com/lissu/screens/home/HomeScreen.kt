@@ -160,7 +160,7 @@ fun HomeScreen(
       Surface(
         modifier = Modifier
           .fillMaxWidth()
-          .clickable { },
+          .clickable { onNavigateToScanner() },
         color = if (isDark) Lissu_Purple else Lissu_Purple2,
         contentColor = Color.White,
         shape = RoundedCornerShape(16.dp)
