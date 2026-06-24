@@ -72,12 +72,35 @@ fun AddListScreen(
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    Text(
-                        text = viewModel.listName,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = titleColor,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                    TextField(
+                        value = viewModel.listName,
+                        onValueChange = { viewModel.listName = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        textStyle = LocalTextStyle.current.copy(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = titleColor
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            focusedIndicatorColor = borderColor,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedTextColor = titleColor,
+                            unfocusedTextColor = titleColor
+                        ),
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                "Nombre lista",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = titleColor.copy(alpha = 0.5f)
+                            )
+                        }
                     )
 
                     LazyColumn(
