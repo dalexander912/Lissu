@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -96,9 +95,6 @@ fun AppScaffold(
                   .offset(x = (-8).dp, y = 8.dp)
                   .background(Color.White, CircleShape)
               )
-            }
-            IconButton(onClick = { }) {
-              Icon(Icons.Outlined.Settings, "Configuración", tint = Color.White)
             }
           }
         )
