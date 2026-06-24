@@ -98,7 +98,11 @@ fun Lissu(modifier: Modifier = Modifier, context: Context) {
       }
       entry<Routes.Scanner> {
         ScannerScreen(
-          onBack = { backStack.removeLastOrNull() }
+          onBack = { backStack.removeLastOrNull() },
+          onNavigateToHome = { backStack.add(Routes.Home) },
+          onNavigateToAddList = { backStack.add(Routes.AddList()) },
+          onNavigateToMaps = { backStack.add(Routes.Maps) },
+          onNavigateToAccount = { backStack.add(Routes.Account) }
         )
       }
       entry<Routes.Maps> {
