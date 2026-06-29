@@ -32,10 +32,12 @@ import com.lissu.ui.theme.PurpleGrey40
 fun AddListScreen(
     listId: String? = null,
     viewModel: AddListViewModel = viewModel(factory = AddListViewModel.Factory),
+    onBack: () -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToAddList: () -> Unit,
     onNavigateToMaps: () -> Unit,
     onNavigateToAccount: () -> Unit,
+    onNavigateToReminders: () -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
     var showDialog by remember { mutableStateOf(false) }
@@ -52,10 +54,12 @@ fun AddListScreen(
     AppScaffold(
         title = "Usuario1",
         currentScreen = Routes.AddList(),
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
-        onNavigateToAccount = onNavigateToAccount
+        onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerPadding ->
         Box(
             modifier = Modifier

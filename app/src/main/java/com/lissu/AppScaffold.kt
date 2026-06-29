@@ -77,7 +77,7 @@ fun AppScaffold(
           navigationIcon = {
             if (navigationIcon != null) {
               navigationIcon()
-            } else if (onBack != null) {
+            } else if (onBack != null && currentScreen != Routes.Home) {
               IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver", tint = Color.White)
               }

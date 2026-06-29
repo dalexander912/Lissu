@@ -34,6 +34,7 @@ fun ScannerScreen(
     onNavigateToAddList: () -> Unit,
     onNavigateToMaps: () -> Unit,
     onNavigateToAccount: () -> Unit,
+    onNavigateToReminders: () -> Unit
 ) {
     val viewModel: ScannerScreenViewModel = viewModel(factory = ScannerScreenViewModel.Factory)
     val uiState by viewModel.uiState.collectAsState()
@@ -60,6 +61,7 @@ fun ScannerScreen(
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders,
         navigationIcon = {
             IconButton(onClick = {
                 viewModel.resetScan()

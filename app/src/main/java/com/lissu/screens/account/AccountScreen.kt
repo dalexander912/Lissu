@@ -50,6 +50,7 @@ fun AccountScreen(
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
