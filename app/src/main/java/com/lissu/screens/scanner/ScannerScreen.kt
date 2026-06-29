@@ -28,8 +28,15 @@ import com.lissu.AppScaffold
 import com.lissu.Routes
 
 @Composable
-fun ScannerScreen(onBack: () -> Unit) {
-    val viewModel: ScannerScreenViewModel = viewModel()
+fun ScannerScreen(
+    onBack: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    onNavigateToAddList: () -> Unit,
+    onNavigateToMaps: () -> Unit,
+    onNavigateToAccount: () -> Unit,
+    onNavigateToReminders: () -> Unit
+) {
+    val viewModel: ScannerScreenViewModel = viewModel(factory = ScannerScreenViewModel.Factory)
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
@@ -50,6 +57,11 @@ fun ScannerScreen(onBack: () -> Unit) {
     AppScaffold(
         title = "Scanner",
         currentScreen = Routes.Scanner,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToAddList = onNavigateToAddList,
+        onNavigateToMaps = onNavigateToMaps,
+        onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders,
         navigationIcon = {
             IconButton(onClick = {
                 viewModel.resetScan()

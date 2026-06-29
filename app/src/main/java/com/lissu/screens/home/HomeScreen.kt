@@ -33,7 +33,7 @@ import com.lissu.ui.theme.Lissu_Purple2
 
 @Composable
 fun HomeScreen(
-  viewModel: HomeViewModel = viewModel(),
+  viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
   onNavigateToHome: () -> Unit,
   onNavigateToAddList: (String?) -> Unit,
   onNavigateToMaps: () -> Unit,
