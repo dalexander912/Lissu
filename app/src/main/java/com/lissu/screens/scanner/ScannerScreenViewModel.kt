@@ -17,6 +17,7 @@ import com.lissu.data.models.Item
 import com.lissu.data.repositories.ShoppingListRepository
 import com.lissu.data.models.ShoppingList
 import java.util.UUID
+import kotlinx.coroutines.flow.first
 data class ScannerUiState(
     val barcode: String = "",
     val scannedItem: Item? = null,
@@ -24,7 +25,8 @@ data class ScannerUiState(
     val scanned: Boolean = false,
     val error: String? = null,
     val showListSelector: Boolean = false,
-    val shoppingLists: List<ShoppingList> = emptyList()
+    val shoppingLists: List<ShoppingList> = emptyList(),
+    val selectedListIds: Set<String> = emptySet(),
 )
 
 class ScannerScreenViewModel(
@@ -84,26 +86,48 @@ class ScannerScreenViewModel(
 
     fun onShowListSelector() {
         viewModelScope.launch {
-            shoppingListRepository.getShoppingListsWithItems().collect { lists ->
-                _uiState.update { it.copy(showListSelector = true, shoppingLists = lists) }
-            }
+
+            //usar first() para obtener el primer valor y no seguir escuchando cambios
+            val lists = shoppingListRepository.getShoppingListsWithItems().first()
+
+            _uiState.update { it.copy(showListSelector = true, shoppingLists = lists, selectedListIds = emptySet()) }
+
         }
     }
 
     fun onDismissListSelector() {
-        _uiState.update { it.copy(showListSelector = false) }
+        _uiState.update { it.copy(showListSelector = false, selectedListIds = emptySet()) }
     }
 
+    fun toggleListSelection(listId: String) {
+        _uiState.update { state ->
+            val newSelected = if (state.selectedListIds.contains(listId)) {
+                state.selectedListIds - listId
+            } else {
+                state.selectedListIds + listId
+            }
+            state.copy(selectedListIds = newSelected)
+        }
+    }
 
-    fun addItemToList(listId: String) {
+    fun addItemsToSelectedLists() {
         val scannedItem = _uiState.value.scannedItem ?: return
+        val selectedIds = _uiState.value.selectedListIds
+        if (selectedIds.isEmpty()) return
 
         viewModelScope.launch {
+            selectedIds.forEach { listId ->
+                val itemToSave = scannedItem.copy(id = UUID.randomUUID().toString())
+                shoppingListRepository.addItemToList(listId, itemToSave)
+            }
 
-            val itemToSave = scannedItem.copy(id = UUID.randomUUID().toString())
-            shoppingListRepository.addItemToList(listId, itemToSave)
-
-            _uiState.update { it.copy(showListSelector = false, scanned = false, scannedItem = null) }
+            //cerrar el selector y resetear el estado del escaner
+            _uiState.update { it.copy(
+                showListSelector = false,
+                scanned = false,
+                scannedItem = null,
+                selectedListIds = emptySet())
+            }
         }
     }
 
