@@ -85,7 +85,8 @@ fun ScannerScreen(
             Text("Escaner", style = MaterialTheme.typography.headlineSmall)
 
             // Instanciar la vista que procesa  el hardware y la IA
-            if (hasCameraPermission && !uiState.scanned) {
+            //ocultar camara si popup esta abierto
+            if (hasCameraPermission && !uiState.scanned && !uiState.showListSelector) {
                 CameraBarcodeScanner(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -165,34 +166,51 @@ fun ScannerScreen(
             textContentColor = MaterialTheme.colorScheme.onSurface,
             title = {
                 Text(
-                    text = "Selecciona una lista",
+                    text = "Selecciona listas",
                     style = MaterialTheme.typography.titleLarge
                 )
             },
             text = {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     uiState.shoppingLists.forEach { list ->
+                        val isSelected = uiState.selectedListIds.contains(list.id)
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(12.dp))
-                                .clickable { viewModel.addItemToList(list.id) },
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                .clickable { viewModel.toggleListSelection(list.id) },
+                            color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                         ) {
-                            Text(
-                                text = list.name,
+                            Row(
                                 modifier = Modifier.padding(16.dp),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Checkbox(
+                                    checked = isSelected,
+                                    onCheckedChange = { viewModel.toggleListSelection(list.id) }
+                                )
+                                Text(
+                                    text = list.name,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }
             },
             confirmButton = {
+                Button(
+                    onClick = viewModel::addItemsToSelectedLists,
+                    enabled = uiState.selectedListIds.isNotEmpty()
+                ) {
+                    Text("Aceptar")
+                }
+            },
+            dismissButton = {
                 TextButton(onClick = viewModel::onDismissListSelector) {
                     Text("Cancelar", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
