@@ -9,9 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,6 +46,8 @@ fun HomeScreen(
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists by viewModel.shoppingLists.collectAsState()
+  val currentOrder by viewModel.sortOrder.collectAsState()
+  var showSortMenu by remember { mutableStateOf(false) }
 
   AppScaffold(
     title = "Usuario1",
@@ -59,13 +63,68 @@ fun HomeScreen(
         .padding(innerPadding)
         .padding(top = 16.dp, bottom = 16.dp, start = 8.dp, end = 8.dp)
     ) {
-      // LISTAS //
-      Text(
-        "Tus listas",
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(bottom = 16.dp, start = 8.dp)
-      )
+      // TÍTULO Y FILTRO //
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(bottom = 8.dp, start = 8.dp, end = 0.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(
+          "Tus listas",
+          fontSize = 20.sp,
+          fontWeight = FontWeight.Bold,
+        )
+
+        Box {
+          IconButton(onClick = { showSortMenu = true }) {
+            Icon(
+              imageVector = Icons.Default.Sort,
+              contentDescription = "Ordenar",
+              tint = if (isDark) Color.White else Color.Black
+            )
+          }
+
+          DropdownMenu(
+            expanded = showSortMenu,
+            onDismissRequest = { showSortMenu = false }
+          ) {
+            DropdownMenuItem(
+              text = { Text("Más recientes") },
+              onClick = {
+                viewModel.changeSortOrder(SortOrder.NEWEST)
+                showSortMenu = false
+              },
+              leadingIcon = { if (currentOrder == SortOrder.NEWEST) Icon(Icons.Default.Check, null) }
+            )
+            DropdownMenuItem(
+              text = { Text("Más antiguas") },
+              onClick = {
+                viewModel.changeSortOrder(SortOrder.OLDEST)
+                showSortMenu = false
+              },
+              leadingIcon = { if (currentOrder == SortOrder.OLDEST) Icon(Icons.Default.Check, null) }
+            )
+            DropdownMenuItem(
+              text = { Text("Nombre (A-Z)") },
+              onClick = {
+                viewModel.changeSortOrder(SortOrder.NAME_ASC)
+                showSortMenu = false
+              },
+              leadingIcon = { if (currentOrder == SortOrder.NAME_ASC) Icon(Icons.Default.Check, null) }
+            )
+            DropdownMenuItem(
+              text = { Text("Nombre (Z-A)") },
+              onClick = {
+                viewModel.changeSortOrder(SortOrder.NAME_DESC)
+                showSortMenu = false
+              },
+              leadingIcon = { if (currentOrder == SortOrder.NAME_DESC) Icon(Icons.Default.Check, null) }
+            )
+          }
+        }
+      }
 
       if (shoppingLists.isEmpty()) {
         Column(
