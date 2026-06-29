@@ -39,7 +39,7 @@ fun LoginScreen(
     AppScaffold(
         title = "Ingresar",
         currentScreen = Routes.Login,
-        showTopBar = false,
+        showTopBar = true,
         showBottomBar = true,
         onBack = onBack,
         onNavigateToHome = onNavigateToHome,

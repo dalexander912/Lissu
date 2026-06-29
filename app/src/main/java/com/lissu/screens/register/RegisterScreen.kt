@@ -42,7 +42,7 @@ fun RegisterScreen(
     AppScaffold (
         title = "Registrarse",
         currentScreen = Routes.Register,
-        showTopBar = false,
+        showTopBar = true,
         showBottomBar = true,
         onBack = onBack,
         onNavigateToHome = onNavigateToHome,
