@@ -2,34 +2,16 @@ package com.lissu
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -64,9 +46,9 @@ fun AppScaffold(
   onNavigateToAddList: () -> Unit = {},
   onNavigateToMaps: () -> Unit = {},
   onNavigateToAccount: () -> Unit = {},
+  onNavigateToReminders: () -> Unit = {},
 
   content: @Composable (PaddingValues) -> Unit
-
 
 ) {
   val isDark = isSystemInDarkTheme()
@@ -77,7 +59,7 @@ fun AppScaffold(
     topBar = {
       if (showTopBar && title.isNotEmpty()) {
         TopAppBar(
-          colors = topAppBarColors(
+          colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Lissu_Purple,
             titleContentColor = Color.White,
           ),
@@ -88,29 +70,30 @@ fun AppScaffold(
                 contentDescription = "Lissu",
                 modifier = Modifier.size(56.dp)
               )
-              Spacer(Modifier.width(12.dp))
-              Text(title, fontWeight = FontWeight.Bold)
+              Spacer(Modifier.width(8.dp))
+              Text(title, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
           },
           navigationIcon = {
             if (navigationIcon != null) {
               navigationIcon()
-            } else if (onBack != null) {
+            } else if (onBack != null && currentScreen != Routes.Home) {
               IconButton(onClick = onBack) {
-                Icon(
-                  Icons.AutoMirrored.Filled.ArrowBack,
-                  contentDescription = "Volver",
-                  tint = Color.White
-                )
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver", tint = Color.White)
               }
             }
           },
           actions = {
-            IconButton(onClick = {  }) {
-              Icon(
-                Icons.Outlined.Notifications,
-                contentDescription = "Recordatorios",
-                tint = Color.White
+            Box {
+              IconButton(onClick = onNavigateToReminders) {
+                Icon(Icons.Outlined.Notifications, "Notificaciones", tint = Color.White)
+              }
+              Box(
+                modifier = Modifier
+                  .size(8.dp)
+                  .align(Alignment.TopEnd)
+                  .offset(x = (-8).dp, y = 8.dp)
+                  .background(Color.White, CircleShape)
               )
             }
           }
@@ -127,14 +110,10 @@ fun AppScaffold(
               modifier = Modifier.fillMaxWidth(),
               horizontalArrangement = Arrangement.SpaceAround
             ) {
-              BottomBarButton(onNavigateToHome,
-                R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
-              BottomBarButton(onNavigateToAddList,
-                R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
-              BottomBarButton(onNavigateToMaps,
-                R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
-              BottomBarButton(onNavigateToAccount,
-                R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
+              BottomBarButton(onNavigateToHome, R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
+              BottomBarButton(onNavigateToAddList, R.drawable.add_list, "Agregar", Routes.AddList(), currentScreen, isDark)
+              BottomBarButton(onNavigateToMaps, R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
+              BottomBarButton(onNavigateToAccount, R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
             }
           }
         )
@@ -154,11 +133,16 @@ fun BottomBarButton(
   currentScreen: Routes,
   isDark: Boolean
 ) {
+  val isSelected = when {
+    currentScreen is Routes.AddList && screen is Routes.AddList -> true
+    else -> currentScreen == screen
+  }
+
   Card(
     modifier = Modifier.clickable { onClick() }
       .width(70.dp)
       .drawBehind {
-        if(currentScreen == screen) {
+        if(isSelected) {
           drawRoundRect(
             color = if(isDark) Lissu_Purple2 else Lissu_DarkPurple,
             alpha = if(isDark) 0.3f else 0.1f,

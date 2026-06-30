@@ -22,29 +22,28 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.White,
     onBackground = Color.White,
     onSurface = Color.White,
-    surfaceVariant = Color(0xFF333333),
-    onSurfaceVariant = Color(0xFFCCCCCC)
+    surfaceVariant = Color(0xFF2D1F35),
+    onSurfaceVariant = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Lissu_Purple,
-    secondary = PurpleGrey40,
+    secondary = Lissu_Purple2,
     tertiary = Pink40,
 
-    background = Color(0xFFF5F5F5),
+    background = Color.White,
     surface = Color.White,
     onPrimary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
-    surfaceVariant = Color(0xFFF0F0F0),
-    onSurfaceVariant = Color(0xFF666666)
+    surfaceVariant = Lissu_LightPurple,
+    onSurfaceVariant = Color.Black
 )
 
 @Composable
 fun LissuTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = false, // Desactivamos forzar los colores de Lissu
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

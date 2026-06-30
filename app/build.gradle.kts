@@ -2,6 +2,7 @@ plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -20,6 +21,14 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+    externalNativeBuild {
+      cmake {
+        //alinear el código nativo a 16 KB
+        arguments ("-DANDROID_ALIGN_16KB=ON")
+      }
+    }
+
   }
 
   buildTypes {
@@ -35,6 +44,14 @@ android {
   buildFeatures {
     compose = true
   }
+
+  packaging {
+    jniLibs {
+      useLegacyPackaging = false
+    }
+  }
+
+
 }
 
 dependencies {
@@ -49,6 +66,9 @@ dependencies {
   implementation(libs.ktor.client.content.negotiation)
   implementation(libs.ktor.serialization.kotlinx.json)
   implementation(libs.ktor.client.logging)
+  implementation(libs.room.runtime)
+  implementation(libs.room.ktx)
+  ksp(libs.room.compiler)
 
   implementation(libs.androidx.core.splashscreen)
   implementation(libs.androidx.core.ktx)
@@ -67,4 +87,17 @@ dependencies {
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
   debugImplementation(libs.androidx.compose.ui.tooling)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+  // Permisos para notificaciones
+  implementation(libs.accompanist.permissions)
+
+  // WorkManager: programación de notificaciones
+  implementation(libs.work.runtime.ktx)
+  // CameraX
+  implementation(libs.androidx.camera.camera2)
+  implementation(libs.androidx.camera.lifecycle)
+  implementation(libs.androidx.camera.view)
+
+  // ML Kit barcode
+  implementation(libs.mlkit.barcode.scanning)
 }

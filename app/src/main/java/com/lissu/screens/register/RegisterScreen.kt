@@ -32,6 +32,7 @@ fun RegisterScreen(
     onNavigateToAddList: () -> Unit = {},
     onNavigateToMaps: () -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {}
 ) {
     var usuario by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
@@ -41,12 +42,14 @@ fun RegisterScreen(
     AppScaffold (
         title = "Registrarse",
         currentScreen = Routes.Register,
-        showTopBar = false,
+        showTopBar = true,
         showBottomBar = true,
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerpadding ->
         Column(
             modifier = Modifier

@@ -41,7 +41,8 @@ fun AccountScreen(
     onNavigateToMaps: () -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
     onNavigateToLogin: () -> Unit = {},
-    onNavigateToRegister: () -> Unit = {}
+    onNavigateToRegister: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {}
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val isDark = isSystemInDarkTheme()
@@ -49,10 +50,12 @@ fun AccountScreen(
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerPadding ->
         Column(
             modifier = Modifier
