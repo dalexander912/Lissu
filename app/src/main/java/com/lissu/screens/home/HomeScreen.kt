@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
+import com.lissu.AuthViewModel
 import com.lissu.R
 import com.lissu.Routes
 import com.lissu.data.models.ShoppingList
@@ -43,6 +44,7 @@ fun HomeScreen(
   onNavigateToAddReminder: () -> Unit,
   onNavigateToReminders: () -> Unit,
   onNavigateToScanner: () -> Unit,
+  username: String
 ) {
   val isDark = isSystemInDarkTheme()
   val shoppingLists by viewModel.shoppingLists.collectAsState()
@@ -50,7 +52,7 @@ fun HomeScreen(
   var showSortMenu by remember { mutableStateOf(false) }
 
   AppScaffold(
-    title = "Usuario1",
+    title = username,
     currentScreen = Routes.Home,
     onNavigateToHome = onNavigateToHome,
     onNavigateToAddList = { onNavigateToAddList(null) },
@@ -350,6 +352,7 @@ fun HomePreview() {
     onNavigateToAccount = {},
     onNavigateToAddReminder = {},
     onNavigateToReminders = {},
-    onNavigateToScanner = {}
+    onNavigateToScanner = {},
+    username = "usuario"
   )
 }

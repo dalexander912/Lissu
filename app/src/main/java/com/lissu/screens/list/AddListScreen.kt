@@ -37,7 +37,8 @@ fun AddListScreen(
     onNavigateToAddList: () -> Unit,
     onNavigateToMaps: () -> Unit,
     onNavigateToAccount: () -> Unit,
-    onNavigateToReminders: () -> Unit
+    onNavigateToReminders: () -> Unit,
+    username: String
 ) {
     val isDark = isSystemInDarkTheme()
     var showDialog by remember { mutableStateOf(false) }
@@ -52,7 +53,7 @@ fun AddListScreen(
     val titleColor = if (isDark) Color.White else Color.Black
 
     AppScaffold(
-        title = "Usuario1",
+        title = username,
         currentScreen = Routes.AddList(),
         onBack = onBack,
         onNavigateToHome = onNavigateToHome,

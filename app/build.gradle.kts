@@ -88,6 +88,9 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.tooling)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+  // Datastore: Autenticación de usuarios
+  implementation(libs.androidx.datastore.preferences)
+
   // Permisos para notificaciones
   implementation(libs.accompanist.permissions)
 
