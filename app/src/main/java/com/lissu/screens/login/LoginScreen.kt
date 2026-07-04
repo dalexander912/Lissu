@@ -29,7 +29,6 @@ import com.lissu.Routes
 fun LoginScreen(
     onBack: () -> Unit,
     onNavigateToRegister: () -> Unit,
-    onLoginSuccess: () -> Unit,
     onNavigateToHome: () -> Unit = {},
     onNavigateToAddList: () -> Unit = {},
     onNavigateToMaps: () -> Unit = {},
@@ -157,7 +156,6 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         viewModel.login(correo, contrasena)
-                        onLoginSuccess()
                     },
                     enabled = !isLoading && correo.isNotBlank() && contrasena.isNotBlank(),
                     modifier = Modifier

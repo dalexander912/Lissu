@@ -42,6 +42,8 @@ fun RegisterScreen(
     var contrasena by remember { mutableStateOf("") }
     var confirmarContrasena by remember { mutableStateOf("") }
 
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
+
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
@@ -236,5 +238,9 @@ fun RegisterScreen(
                 }
             }
         }
+    }
+
+    if(isLoggedIn == true) {
+        onNavigateToHome()
     }
 }

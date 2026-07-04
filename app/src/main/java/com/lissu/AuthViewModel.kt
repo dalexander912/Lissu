@@ -19,10 +19,10 @@ class AuthViewModel(
 
   // null = todavía no sabemos (DataStore cargando)
   val isLoggedIn: StateFlow<Boolean?> = repository.isLoggedIn
-    .stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5_000), null)
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
   val userName: StateFlow<String?> = repository.userName
-    .stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5_000), null)
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
   private val _isLoading = MutableStateFlow(false)
   val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -32,6 +32,7 @@ class AuthViewModel(
 
   fun register(name: String, email: String, password: String) {
     viewModelScope.launch {
+      _error.value = null
       _isLoading.value = true
       try {
         repository.register(name, email, password)
