@@ -14,7 +14,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 object AuthKtorClient {
-  private const val BASE_URL = " - "
+  private const val BASE_URL = "https://lissu.onrender.com"
 
   val client = HttpClient(OkHttp) {
 
