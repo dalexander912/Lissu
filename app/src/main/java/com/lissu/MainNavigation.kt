@@ -11,6 +11,7 @@ import com.lissu.screens.home.HomeScreen
 import com.lissu.screens.list.AddListScreen
 import com.lissu.screens.reminders.RemindersScreen
 import com.lissu.screens.scanner.ScannerScreen
+import com.lissu.screens.stores.StoresScreen
 
 @Composable
 fun MainNavigation(
@@ -80,7 +81,13 @@ fun MainNavigation(
         )
       }
       entry<Routes.Maps> {
-
+        StoresScreen(
+          onBack = { backStack.removeLastOrNull() },
+          onNavigateToHome = { backStack.add(Routes.Home) },
+          onNavigateToAddList = { backStack.add(Routes.AddList()) },
+          onNavigateToAccount = { backStack.add(Routes.Account) },
+          onNavigateToReminders = { backStack.add(Routes.Reminders) }
+        )
       }
       entry<Routes.Account> {
         AccountScreen(

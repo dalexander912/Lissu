@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
-import com.lissu.AuthViewModel
 import com.lissu.R
 import com.lissu.Routes
 import com.lissu.data.models.ShoppingList
