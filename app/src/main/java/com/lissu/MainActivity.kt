@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
   @OptIn(ExperimentalPermissionsApi::class)
   @RequiresApi(Build.VERSION_CODES.O)
   override fun onCreate(savedInstanceState: Bundle?) {
-    installSplashScreen()
+    val splashScreen = installSplashScreen()
     super.onCreate(savedInstanceState)
     createNotificationChannel(this)
     enableEdgeToEdge()
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
           }
         }
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          Lissu(modifier = Modifier.padding(innerPadding), this)
+          Lissu(modifier = Modifier.padding(innerPadding), splashScreen, this)
         }
       }
     }
