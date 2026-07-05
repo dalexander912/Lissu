@@ -20,6 +20,7 @@ class AuthRepositoryImpl(
   // Hay sesión si hay token guardado
   override val isLoggedIn: Flow<Boolean> = session.token.map { it != null }
   override val userName: Flow<String?> = session.userName
+  override val email: Flow<String?> = session.email
 
   override suspend fun register(name: String, email: String, password: String) {
     val response: LoginResponseDto = AuthKtorClient.client.post("auth/register") {
@@ -28,7 +29,7 @@ class AuthRepositoryImpl(
     }.body()
 
     // Login exitoso: guardamos la sesión
-    session.save(response.token, response.user.name)
+    session.save(response.token, response.user.name, email)
   }
 
   override suspend fun login(email: String, password: String) {
@@ -38,7 +39,7 @@ class AuthRepositoryImpl(
     }.body()
 
     // Login exitoso: guardamos la sesión
-    session.save(response.token, response.user.name)
+    session.save(response.token, response.user.name, email)
   }
 
   override suspend fun logout() {

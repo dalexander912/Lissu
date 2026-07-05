@@ -16,16 +16,19 @@ class SessionManager(private val context: Context) {
   companion object {
     private val TOKEN_KEY = stringPreferencesKey("auth_token")
     private val NAME_KEY = stringPreferencesKey("user_name")
+    private val EMAIL_KEY = stringPreferencesKey("user_email")
   }
 
   // Lectura reactiva: emite cada vez que cambia
   val token: Flow<String?> = context.dataStore.data.map { it[TOKEN_KEY] }
   val userName: Flow<String?> = context.dataStore.data.map { it[NAME_KEY] }
+  val email: Flow<String?> = context.dataStore.data.map { it[EMAIL_KEY] }
 
-  suspend fun save(token: String, name: String) {
+  suspend fun save(token: String, name: String, email: String) {
     context.dataStore.edit { prefs ->
       prefs[TOKEN_KEY] = token
       prefs[NAME_KEY] = name
+      prefs[EMAIL_KEY] = email
     }
   }
 

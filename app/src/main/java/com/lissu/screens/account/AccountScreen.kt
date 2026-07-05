@@ -53,6 +53,7 @@ fun AccountScreen(
 
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
     val username by authViewModel.userName.collectAsState()
+    val email by authViewModel.email.collectAsState()
 
     AppScaffold (
         title = "Cuenta",
@@ -115,7 +116,7 @@ fun AccountScreen(
             if (isLoggedIn == true) {
                 InfoSection(label = "Información personal") {
                     InfoRow(icon = Icons.Outlined.Person, label = "Nombre", value = username ?: "")
-                    InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = "usuario1@email.com")
+                    InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = email ?: "")
                 }
 
                 Spacer(Modifier.height(12.dp))
