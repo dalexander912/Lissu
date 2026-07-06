@@ -16,6 +16,8 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +27,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
+import com.lissu.AuthViewModel
 import com.lissu.R
 import com.lissu.Routes
 import com.lissu.ui.theme.Lissu_LightPurple
@@ -33,7 +37,6 @@ import com.lissu.ui.theme.Lissu_Purple
 
 @Composable
 fun AccountScreen(
-    isLoggedIn: Boolean,
     onLogout: () -> Unit,
     onBack: () -> Unit = {},
     onNavigateToHome: () -> Unit = {},
@@ -42,14 +45,20 @@ fun AccountScreen(
     onNavigateToAccount: () -> Unit = {},
     onNavigateToLogin: () -> Unit = {},
     onNavigateToRegister: () -> Unit = {},
-    onNavigateToReminders: () -> Unit = {}
+    onNavigateToReminders: () -> Unit = {},
+    authViewModel: AuthViewModel = viewModel(factory = AuthViewModel.Factory)
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val isDark = isSystemInDarkTheme()
 
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+    val username by authViewModel.userName.collectAsState()
+    val email by authViewModel.email.collectAsState()
+
     AppScaffold (
         title = "Cuenta",
         currentScreen = Routes.Account,
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
@@ -87,12 +96,12 @@ fun AccountScreen(
                 Spacer(Modifier.height(10.dp))
 
                 Text(
-                    text = if (isLoggedIn) "Usuario1" else "Modo Invitado",
+                    text = if (isLoggedIn == true) {username ?: ""} else "Modo invitado",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     color = colorScheme.onSurface
                 )
-                if (!isLoggedIn) {
+                if (isLoggedIn != true) {
                     Text(
                         text = "Inicia sesión o registrate",
                         fontSize = 13.sp,
@@ -104,10 +113,10 @@ fun AccountScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            if (isLoggedIn) {
+            if (isLoggedIn == true) {
                 InfoSection(label = "Información personal") {
-                    InfoRow(icon = Icons.Outlined.Person, label = "Nombre", value = "Usuario1")
-                    InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = "usuario1@email.com")
+                    InfoRow(icon = Icons.Outlined.Person, label = "Nombre", value = username ?: "")
+                    InfoRow(icon = Icons.Outlined.Email, label = "Correo", value = email ?: "")
                 }
 
                 Spacer(Modifier.height(12.dp))

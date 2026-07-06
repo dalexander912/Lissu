@@ -23,6 +23,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -77,6 +78,7 @@ fun ReminderCard(
           onCheckedChange = { isChecked ->
             viewModel.updateReminder(reminder, isChecked, context)
           },
+          modifier = Modifier.scale(0.8f),
           colors = SwitchDefaults.colors(
             checkedThumbColor = if(isDark) Lissu_DarkPurple else Lissu_LightPurple,
             checkedTrackColor = if(isDark) Lissu_LightPurple else Lissu_DarkPurple

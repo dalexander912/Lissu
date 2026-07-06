@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
+import com.lissu.AuthViewModel
 import com.lissu.R
 import com.lissu.Routes
 
@@ -26,24 +29,30 @@ import com.lissu.Routes
 fun LoginScreen(
     onBack: () -> Unit,
     onNavigateToRegister: () -> Unit,
-    onLoginSuccess: () -> Unit,
     onNavigateToHome: () -> Unit = {},
     onNavigateToAddList: () -> Unit = {},
     onNavigateToMaps: () -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {},
+    viewModel: AuthViewModel = viewModel(factory = AuthViewModel.Factory)
 ) {
-    var usuario by remember { mutableStateOf("") }
-    var contrasena by remember { mutableStateOf("") }
+    var correo by rememberSaveable { mutableStateOf("") }
+    var contrasena by rememberSaveable { mutableStateOf("") }
+
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
 
     AppScaffold(
         title = "Ingresar",
         currentScreen = Routes.Login,
         showTopBar = false,
-        showBottomBar = true,
+        showBottomBar = false,
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerpadding ->
         Column(
             modifier = Modifier
@@ -95,16 +104,16 @@ fun LoginScreen(
                 )
 
                 Text(
-                    text = "Usuario",
+                    text = "Correo",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 OutlinedTextField(
-                    value = usuario,
-                    onValueChange = { usuario = it },
-                    placeholder = { Text("Ingresar nombre de usuario", fontSize = 13.sp) },
+                    value = correo,
+                    onValueChange = { correo = it },
+                    placeholder = { Text("Ingresar correo electrónico", fontSize = 13.sp) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -137,10 +146,18 @@ fun LoginScreen(
                     singleLine = true
                 )
 
+                if (error != null) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(error!!, color = MaterialTheme.colorScheme.error)
+                }
+
                 Spacer(Modifier.height(24.dp))
 
                 Button(
-                    onClick = onLoginSuccess,
+                    onClick = {
+                        viewModel.login(correo, contrasena)
+                    },
+                    enabled = !isLoading && correo.isNotBlank() && contrasena.isNotBlank(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
@@ -150,6 +167,7 @@ fun LoginScreen(
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
+                    if (isLoading) CircularProgressIndicator(modifier = Modifier.size(20.dp)) else
                     Text(
                         text = "Ingresar",
                         fontSize = 16.sp,

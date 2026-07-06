@@ -180,14 +180,14 @@ fun AddReminderScreen(
           Text(
             text = "Lissu te recordará periodicamente que debes comprar este producto luego del lapso de tiempo establecido.",
             fontSize = 12.sp,
-            color = Lissu_LightPurple,
+            color = Color.White,
             lineHeight = 16.sp
           )
           Spacer(Modifier.height(8.dp))
           Text(
             text = "Una vez creado el recordatorio podrás desactivar o activar las notificaciones en cualquier momento.",
             fontSize = 12.sp,
-            color = Lissu_LightPurple,
+            color = Color.White,
             lineHeight = 16.sp
           )
 

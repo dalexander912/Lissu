@@ -23,34 +23,44 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
 import com.lissu.Routes
-import com.lissu.data.Item
+import com.lissu.data.models.Item
 import com.lissu.ui.theme.Lissu_Purple
 import com.lissu.ui.theme.Lissu_Purple2
 import com.lissu.ui.theme.PurpleGrey40
 
 @Composable
 fun AddListScreen(
-    viewModel: AddListViewModel = viewModel(),
+    listId: String? = null,
+    viewModel: AddListViewModel = viewModel(factory = AddListViewModel.Factory),
+    onBack: () -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToAddList: () -> Unit,
     onNavigateToMaps: () -> Unit,
     onNavigateToAccount: () -> Unit,
+    onNavigateToReminders: () -> Unit,
+    username: String
 ) {
     val isDark = isSystemInDarkTheme()
     var showDialog by remember { mutableStateOf(false) }
     var newItemName by remember { mutableStateOf("") }
+
+    LaunchedEffect(listId) {
+        viewModel.loadList(listId)
+    }
 
     val containerColor = if (isDark) Color(0xFF2D1F35) else Color(0xFFE1D5E7)
     val borderColor = if (isDark) Lissu_Purple2 else Color(0xFF9E86B9)
     val titleColor = if (isDark) Color.White else Color.Black
 
     AppScaffold(
-        title = "Usuario1",
-        currentScreen = Routes.AddList,
+        title = username,
+        currentScreen = Routes.AddList(),
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
-        onNavigateToAccount = onNavigateToAccount
+        onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -61,18 +71,41 @@ fun AddListScreen(
         ) {
             Surface(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .border(2.dp, borderColor, RoundedCornerShape(10.dp)),
+                    .fillMaxSize(),
+                    
                 color = containerColor,
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    Text(
-                        text = viewModel.listName,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = titleColor,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                    TextField(
+                        value = viewModel.listName,
+                        onValueChange = { viewModel.listName = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        textStyle = LocalTextStyle.current.copy(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = titleColor
+                        ),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                            focusedIndicatorColor = borderColor,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedTextColor = titleColor,
+                            unfocusedTextColor = titleColor
+                        ),
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                "Nombre lista",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = titleColor.copy(alpha = 0.5f)
+                            )
+                        }
                     )
 
                     LazyColumn(
@@ -95,23 +128,27 @@ fun AddListScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Button(
-                            onClick = { onNavigateToHome() },
-                            modifier = Modifier.weight(0.7f).height(60.dp),
+                            onClick = {
+                                viewModel.saveList()
+                                onNavigateToHome()
+                            },
+                            modifier = Modifier.weight(0.25f).height(60.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = RoundedCornerShape(14.dp),
+                            contentPadding = PaddingValues(0.dp)
                         ) {
-                            Icon(Icons.Default.Save, null, modifier = Modifier.size(20.dp))
-                            Spacer(Modifier.width(8.dp))
-                            Text("Guardar Lista", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Icon(Icons.Default.Save, "Guardar", modifier = Modifier.size(32.dp))
                         }
 
                         Button(
                             onClick = { showDialog = true },
-                            modifier = Modifier.weight(0.3f).height(60.dp),
+                            modifier = Modifier.weight(0.75f).height(60.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple2),
                             shape = RoundedCornerShape(14.dp)
                         ) {
                             Icon(Icons.Default.Add, "Agregar", modifier = Modifier.size(32.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("Añadir", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
                         }
                     }
                 }
@@ -182,8 +219,8 @@ fun ShoppingItemRow(
             Text(
                 text = item.name,
                 modifier = Modifier.weight(1f).clickable { onToggle() },
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
                 color = textColor
             )
             IconButton(onClick = onRemove) {

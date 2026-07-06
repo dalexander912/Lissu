@@ -1,9 +1,20 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.ksp)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+  localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+val placesToken: String = localProperties.getProperty("PLACES_KEY") ?: ""
 
 android {
   namespace = "com.lissu"
@@ -21,6 +32,15 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    buildConfigField("String", "PLACES_TOKEN", "\"$placesToken\"")
+
+    externalNativeBuild {
+      cmake {
+        //alinear el código nativo a 16 KB
+        arguments ("-DANDROID_ALIGN_16KB=ON")
+      }
+    }
+
   }
 
   buildTypes {
@@ -35,7 +55,16 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
+
+  packaging {
+    jniLibs {
+      useLegacyPackaging = false
+    }
+  }
+
+
 }
 
 dependencies {
@@ -72,9 +101,22 @@ dependencies {
   debugImplementation(libs.androidx.compose.ui.tooling)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+  // Datastore: Autenticación de usuarios
+  implementation(libs.androidx.datastore.preferences)
+
   // Permisos para notificaciones
   implementation(libs.accompanist.permissions)
 
   // WorkManager: programación de notificaciones
   implementation(libs.work.runtime.ktx)
+  // CameraX
+  implementation(libs.androidx.camera.camera2)
+  implementation(libs.androidx.camera.lifecycle)
+  implementation(libs.androidx.camera.view)
+
+  // ML Kit barcode
+  implementation(libs.mlkit.barcode.scanning)
+
+  // Google Play Services Location API
+  implementation(libs.play.services.location)
 }

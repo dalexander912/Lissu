@@ -18,7 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lissu.AppScaffold
+import com.lissu.AuthViewModel
 import com.lissu.R
 import com.lissu.Routes
 import com.lissu.ui.theme.Lissu_LightDarkPurple
@@ -32,21 +34,30 @@ fun RegisterScreen(
     onNavigateToAddList: () -> Unit = {},
     onNavigateToMaps: () -> Unit = {},
     onNavigateToAccount: () -> Unit = {},
+    onNavigateToReminders: () -> Unit = {},
+    viewModel: AuthViewModel = viewModel(factory = AuthViewModel.Factory)
 ) {
     var usuario by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var confirmarContrasena by remember { mutableStateOf("") }
 
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
+
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
+
     AppScaffold (
         title = "Registrarse",
         currentScreen = Routes.Register,
         showTopBar = false,
-        showBottomBar = true,
+        showBottomBar = false,
+        onBack = onBack,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
         onNavigateToAccount = onNavigateToAccount,
+        onNavigateToReminders = onNavigateToReminders
     ) { innerpadding ->
         Column(
             modifier = Modifier
@@ -176,11 +187,16 @@ fun RegisterScreen(
                     singleLine = true
                 )
 
+                if (error != null) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(error!!, color = MaterialTheme.colorScheme.error)
+                }
+
                 Spacer(Modifier.height(24.dp))
 
-
                 Button(
-                    onClick = { },
+                    onClick = { viewModel.register(usuario, correo, contrasena) },
+                    enabled = !isLoading && usuario.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
@@ -222,5 +238,9 @@ fun RegisterScreen(
                 }
             }
         }
+    }
+
+    if(isLoggedIn == true) {
+        onNavigateToHome()
     }
 }

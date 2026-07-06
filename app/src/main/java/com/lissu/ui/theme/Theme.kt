@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.White,
     onBackground = Color.White,
     onSurface = Color.White,
-    surfaceVariant = Color(0xFF2D1F35), // Morado muy oscuro para el fondo de la lista en dark mode
+    surfaceVariant = Color(0xFF2D1F35),
     onSurfaceVariant = Color.White
 )
 
@@ -36,7 +36,7 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
-    surfaceVariant = Lissu_LightPurple, // Morado claro (E1D5E7) para el fondo de la lista
+    surfaceVariant = Lissu_LightPurple,
     onSurfaceVariant = Color.Black
 )
 

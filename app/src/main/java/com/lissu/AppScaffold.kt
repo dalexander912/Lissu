@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -78,7 +77,7 @@ fun AppScaffold(
           navigationIcon = {
             if (navigationIcon != null) {
               navigationIcon()
-            } else if (onBack != null) {
+            } else if (onBack != null && currentScreen != Routes.Home) {
               IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver", tint = Color.White)
               }
@@ -97,9 +96,6 @@ fun AppScaffold(
                   .background(Color.White, CircleShape)
               )
             }
-            IconButton(onClick = { }) {
-              Icon(Icons.Outlined.Settings, "Configuración", tint = Color.White)
-            }
           }
         )
       }
@@ -115,7 +111,7 @@ fun AppScaffold(
               horizontalArrangement = Arrangement.SpaceAround
             ) {
               BottomBarButton(onNavigateToHome, R.drawable.home, "Inicio", Routes.Home, currentScreen, isDark)
-              BottomBarButton(onNavigateToAddList, R.drawable.add_list, "Agregar", Routes.AddList, currentScreen, isDark)
+              BottomBarButton(onNavigateToAddList, R.drawable.add_list, "Agregar", Routes.AddList(), currentScreen, isDark)
               BottomBarButton(onNavigateToMaps, R.drawable.store, "Buscar", Routes.Maps, currentScreen, isDark)
               BottomBarButton(onNavigateToAccount, R.drawable.person, "Cuenta", Routes.Account, currentScreen, isDark)
             }
@@ -137,11 +133,16 @@ fun BottomBarButton(
   currentScreen: Routes,
   isDark: Boolean
 ) {
+  val isSelected = when {
+    currentScreen is Routes.AddList && screen is Routes.AddList -> true
+    else -> currentScreen == screen
+  }
+
   Card(
     modifier = Modifier.clickable { onClick() }
       .width(70.dp)
       .drawBehind {
-        if(currentScreen == screen) {
+        if(isSelected) {
           drawRoundRect(
             color = if(isDark) Lissu_Purple2 else Lissu_DarkPurple,
             alpha = if(isDark) 0.3f else 0.1f,
