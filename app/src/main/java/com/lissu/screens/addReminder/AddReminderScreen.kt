@@ -14,14 +14,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SnackbarHostState
@@ -35,7 +32,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -49,7 +48,6 @@ import com.lissu.AppScaffold
 import com.lissu.R
 import com.lissu.Routes
 import com.lissu.data.models.Reminder
-import com.lissu.ui.theme.Lissu_LightPurple
 import com.lissu.ui.theme.Lissu_Purple2
 import kotlinx.coroutines.launch
 
@@ -114,15 +112,13 @@ fun AddReminderScreen(
       Spacer(Modifier.height(16.dp))
 
       Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-          containerColor = MaterialTheme.colorScheme.primary, contentColor = Color.White
-        )
+        modifier = Modifier.fillMaxWidth()
       ) {
         Column(modifier = Modifier.padding(16.dp)) {
           Image(
             painterResource(R.drawable.add_notif),
             contentDescription = "Crear recordatorio",
+            colorFilter = if(isDark) null else ColorFilter.tint(Color.Black),
             modifier = Modifier
               .align(Alignment.End)
               .size(40.dp)
@@ -133,19 +129,17 @@ fun AddReminderScreen(
           OutlinedTextField(
             value = product,
             onValueChange = { product = it },
-            placeholder = { Text("Ingresar nombre del producto") },
+            placeholder = {
+              Text(
+                text = "Ingresar nombre del producto",
+                modifier = Modifier.alpha(0.5f)
+              )
+            },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-              unfocusedTextColor = Color.White,
-              focusedTextColor = Color.White,
-              unfocusedBorderColor = Lissu_Purple2,
-              focusedBorderColor = Color.White,
-              unfocusedPlaceholderColor = Lissu_Purple2,
-              focusedPlaceholderColor = Color.Transparent,
-              cursorColor = Color.White,
-              selectionColors = TextSelectionColors(Color.White, Lissu_Purple2)
+              focusedPlaceholderColor = Color.Transparent
             )
           )
 
@@ -156,7 +150,12 @@ fun AddReminderScreen(
           OutlinedTextField(
             value = daysInput,
             onValueChange = { daysInput = it },
-            placeholder = { Text("Ingresar lapso de tiempo en días") },
+            placeholder = {
+              Text(
+                text = "Ingresar lapso de tiempo en días",
+                modifier = Modifier.alpha(0.5f)
+              )
+            },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             singleLine = true,
@@ -164,14 +163,7 @@ fun AddReminderScreen(
               keyboardType = KeyboardType.Number
             ),
             colors = OutlinedTextFieldDefaults.colors(
-              unfocusedTextColor = Color.White,
-              focusedTextColor = Color.White,
-              unfocusedBorderColor = Lissu_Purple2,
-              focusedBorderColor = Color.White,
-              unfocusedPlaceholderColor = Lissu_Purple2,
-              focusedPlaceholderColor = Color.Transparent,
-              cursorColor = Color.White,
-              selectionColors = TextSelectionColors(Color.White, Lissu_Purple2)
+              focusedPlaceholderColor = Color.Transparent
             )
           )
 
@@ -180,14 +172,12 @@ fun AddReminderScreen(
           Text(
             text = "Lissu te recordará periodicamente que debes comprar este producto luego del lapso de tiempo establecido.",
             fontSize = 12.sp,
-            color = Color.White,
             lineHeight = 16.sp
           )
           Spacer(Modifier.height(8.dp))
           Text(
             text = "Una vez creado el recordatorio podrás desactivar o activar las notificaciones en cualquier momento.",
             fontSize = 12.sp,
-            color = Color.White,
             lineHeight = 16.sp
           )
 
@@ -198,8 +188,7 @@ fun AddReminderScreen(
             modifier = Modifier.fillMaxWidth(),
             enabled = isInputValid,
             colors = ButtonDefaults.buttonColors(
-              containerColor = Lissu_Purple2,
-              disabledContentColor = if(isDark) Color.Unspecified else Lissu_Purple2
+              containerColor = Lissu_Purple2
             )
           ) { Text(text = "Agregar", fontWeight = FontWeight.Bold) }
         }
