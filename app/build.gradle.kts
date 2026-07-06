@@ -116,4 +116,7 @@ dependencies {
 
   // ML Kit barcode
   implementation(libs.mlkit.barcode.scanning)
+
+  // Google Play Services Location API
+  implementation(libs.play.services.location)
 }

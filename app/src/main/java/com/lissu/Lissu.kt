@@ -24,6 +24,6 @@ fun Lissu(
       onLogout = { authViewModel.logout() },
       context = context
     )
-    else -> SessionNavigation()
+    false -> SessionNavigation()
   }
 }
