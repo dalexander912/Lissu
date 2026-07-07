@@ -16,8 +16,11 @@ import kotlinx.coroutines.launch
 import com.lissu.data.models.Item
 import com.lissu.data.repositories.ShoppingListRepository
 import com.lissu.data.models.ShoppingList
+import kotlinx.coroutines.channels.Channel
 import java.util.UUID
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
+
 data class ScannerUiState(
     val barcode: String = "",
     val scannedItem: Item? = null,
@@ -37,6 +40,14 @@ class ScannerScreenViewModel(
 
     private val _uiState = MutableStateFlow(ScannerUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    sealed class UiEvent {
+        data class ShowSnackbar(val message: String) : UiEvent()
+        object SaveSuccess : UiEvent()
+    }
 
     fun onBarcodeScanned(barcode: String) {
 
@@ -128,6 +139,7 @@ class ScannerScreenViewModel(
                 scannedItem = null,
                 selectedListIds = emptySet())
             }
+            _uiEvent.send(UiEvent.SaveSuccess)
         }
     }
 

@@ -16,6 +16,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,7 @@ import com.lissu.data.models.Item
 import com.lissu.ui.theme.Lissu_Purple
 import com.lissu.ui.theme.Lissu_Purple2
 import com.lissu.ui.theme.PurpleGrey40
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AddListScreen(
@@ -41,11 +44,28 @@ fun AddListScreen(
     username: String
 ) {
     val isDark = isSystemInDarkTheme()
+    val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by remember { mutableStateOf(false) }
     var newItemName by remember { mutableStateOf("") }
 
     LaunchedEffect(listId) {
         viewModel.loadList(listId)
+    }
+
+    LaunchedEffect(viewModel.uiEvent) {
+        viewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is AddListViewModel.UiEvent.SaveSuccess -> {
+                    snackbarHostState.showSnackbar(
+                        message = "Lista guardada con éxito",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+                is AddListViewModel.UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
+            }
+        }
     }
 
     val containerColor = if (isDark) Color(0xFF2D1F35) else Color(0xFFE1D5E7)
@@ -56,6 +76,7 @@ fun AddListScreen(
         title = username,
         currentScreen = Routes.AddList(),
         onBack = onBack,
+        snackbarHostState = snackbarHostState,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,
@@ -130,7 +151,6 @@ fun AddListScreen(
                         Button(
                             onClick = {
                                 viewModel.saveList()
-                                onNavigateToHome()
                             },
                             modifier = Modifier.weight(0.25f).height(60.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Lissu_Purple),
@@ -155,6 +175,8 @@ fun AddListScreen(
             }
 
             if (showDialog) {
+                val focusRequester = remember { FocusRequester() }
+
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
                     title = { Text("Agregar producto") },
@@ -163,7 +185,8 @@ fun AddListScreen(
                             value = newItemName,
                             onValueChange = { newItemName = it },
                             label = { Text("Nombre del artículo") },
-                            singleLine = true
+                            singleLine = true,
+                            modifier = Modifier.focusRequester(focusRequester)
                         )
                     },
                     confirmButton = {
@@ -176,6 +199,10 @@ fun AddListScreen(
                         }) { Text("Guardar") }
                     }
                 )
+
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
             }
         }
     }

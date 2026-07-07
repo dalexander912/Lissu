@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.lissu.AppScaffold
 import com.lissu.Routes
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ScannerScreen(
@@ -39,6 +40,7 @@ fun ScannerScreen(
     val viewModel: ScannerScreenViewModel = viewModel(factory = ScannerScreenViewModel.Factory)
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var hasCameraPermission by remember {
         mutableStateOf(
@@ -54,9 +56,23 @@ fun ScannerScreen(
         if (!hasCameraPermission) launcher.launch(Manifest.permission.CAMERA)
     }
 
+    LaunchedEffect(viewModel.uiEvent) {
+        viewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is ScannerScreenViewModel.UiEvent.SaveSuccess -> {
+                    snackbarHostState.showSnackbar("añadido con éxito")
+                }
+                is ScannerScreenViewModel.UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
+            }
+        }
+    }
+
     AppScaffold(
         title = "Scanner",
         currentScreen = Routes.Scanner,
+        snackbarHostState = snackbarHostState,
         onNavigateToHome = onNavigateToHome,
         onNavigateToAddList = onNavigateToAddList,
         onNavigateToMaps = onNavigateToMaps,

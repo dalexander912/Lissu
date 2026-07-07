@@ -13,7 +13,9 @@ import com.lissu.LissuApplication
 import com.lissu.data.models.Item
 import com.lissu.data.models.ShoppingList
 import com.lissu.data.repositories.ShoppingListRepository
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -23,6 +25,14 @@ class AddListViewModel(
     var listId by mutableStateOf<String?>(null)
     var listName by mutableStateOf("Nueva Lista")
     val items = mutableStateListOf<Item>()
+
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    sealed class UiEvent {
+        object SaveSuccess : UiEvent()
+        data class ShowSnackbar(val message: String) : UiEvent()
+    }
 
     fun loadList(id: String?) {
         if (id == null) {
@@ -105,6 +115,7 @@ class AddListViewModel(
             items.forEach { item ->
                 shoppingListRepository.addItemToList(currentId, item)
             }
+            _uiEvent.send(UiEvent.SaveSuccess)
         }
     }
 
