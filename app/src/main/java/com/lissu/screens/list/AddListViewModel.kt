@@ -44,10 +44,9 @@ class AddListViewModel(
             return
         }
 
-        // Si ya está cargada
-        if (listId == id) return
 
         listId = id
+
         viewModelScope.launch {
             // Obtener la lista con sus items en la DB
             val list = shoppingListRepository.getShoppingListById(id).first()
