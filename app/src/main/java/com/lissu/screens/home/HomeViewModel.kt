@@ -19,7 +19,8 @@ enum class SortOrder {
     NAME_ASC,
     NAME_DESC,
     NEWEST,
-    OLDEST
+    OLDEST,
+    BY_DAY
 }
 
 class HomeViewModel(
@@ -29,6 +30,8 @@ class HomeViewModel(
     private val _sortOrder = MutableStateFlow(SortOrder.NEWEST)
     val sortOrder: StateFlow<SortOrder> = _sortOrder
 
+    private val daysOfWeek = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
+
     val shoppingLists: StateFlow<List<ShoppingList>> = 
         shoppingListRepository.getShoppingListsWithItems()
             .combine(_sortOrder) { lists, order ->
@@ -37,6 +40,9 @@ class HomeViewModel(
                     SortOrder.NAME_DESC -> lists.sortedByDescending { it.name.lowercase() }
                     SortOrder.NEWEST -> lists.reversed()
                     SortOrder.OLDEST -> lists
+                    SortOrder.BY_DAY -> lists.sortedBy { list ->
+                        daysOfWeek.indexOf(list.assignedDay ?: "")
+                    }
                 }
             }
             .stateIn(

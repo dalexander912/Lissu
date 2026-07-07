@@ -24,6 +24,7 @@ class AddListViewModel(
 ) : ViewModel() {
     var listId by mutableStateOf<String?>(null)
     var listName by mutableStateOf("Nueva Lista")
+    var assignedDay by mutableStateOf<String?>(null)
     val items = mutableStateListOf<Item>()
 
     private val _uiEvent = Channel<UiEvent>()
@@ -38,6 +39,7 @@ class AddListViewModel(
         if (id == null) {
             listId = null
             listName = "Nueva Lista"
+            assignedDay = null
             items.clear()
             return
         }
@@ -51,6 +53,7 @@ class AddListViewModel(
             val list = shoppingListRepository.getShoppingListById(id).first()
             list?.let {
                 listName = it.name
+                assignedDay = it.assignedDay
                 items.clear()
                 items.addAll(it.items)
             }
@@ -106,7 +109,8 @@ class AddListViewModel(
 
         val shoppingList = ShoppingList(
             id = currentId,
-            name = listName
+            name = listName,
+            assignedDay = assignedDay
         )
 
         viewModelScope.launch {
@@ -117,6 +121,10 @@ class AddListViewModel(
             }
             _uiEvent.send(UiEvent.SaveSuccess)
         }
+    }
+
+    fun updateAssignedDay(day: String?) {
+        assignedDay = day
     }
 
     companion object {

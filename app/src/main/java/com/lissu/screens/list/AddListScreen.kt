@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -47,6 +48,8 @@ fun AddListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by remember { mutableStateOf(false) }
     var newItemName by remember { mutableStateOf("") }
+
+    val daysOfWeek = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
 
     LaunchedEffect(listId) {
         viewModel.loadList(listId)
@@ -102,8 +105,7 @@ fun AddListScreen(
                         value = viewModel.listName,
                         onValueChange = { viewModel.listName = it },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
+                            .fillMaxWidth(),
                         textStyle = LocalTextStyle.current.copy(
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
@@ -113,7 +115,7 @@ fun AddListScreen(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
                             disabledContainerColor = Color.Transparent,
-                            focusedIndicatorColor = borderColor,
+                            focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             focusedTextColor = titleColor,
                             unfocusedTextColor = titleColor
@@ -128,6 +130,38 @@ fun AddListScreen(
                             )
                         }
                     )
+
+                    Text(
+                        "Día asignado:",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = titleColor.copy(alpha = 0.6f),
+                        modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
+                    )
+
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(daysOfWeek) { day ->
+                            val isSelected = viewModel.assignedDay == day
+                            FilterChip(
+                                selected = isSelected,
+                                onClick = { 
+                                    if (isSelected) viewModel.updateAssignedDay(null)
+                                    else viewModel.updateAssignedDay(day)
+                                },
+                                label = { Text(day, fontSize = 12.sp) },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = Lissu_Purple,
+                                    selectedLabelColor = Color.White
+                                )
+                            )
+                        }
+                    }
 
                     LazyColumn(
                         modifier = Modifier.weight(1f),

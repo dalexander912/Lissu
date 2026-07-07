@@ -92,6 +92,14 @@ fun HomeScreen(
             onDismissRequest = { showSortMenu = false }
           ) {
             DropdownMenuItem(
+              text = { Text("Por día") },
+              onClick = {
+                viewModel.changeSortOrder(SortOrder.BY_DAY)
+                showSortMenu = false
+              },
+              leadingIcon = { if (currentOrder == SortOrder.BY_DAY) Icon(Icons.Default.Check, null) }
+            )
+            DropdownMenuItem(
               text = { Text("Más recientes") },
               onClick = {
                 viewModel.changeSortOrder(SortOrder.NEWEST)
@@ -154,13 +162,38 @@ fun HomeScreen(
           verticalArrangement = Arrangement.spacedBy(12.dp),
           contentPadding = PaddingValues(8.dp)
         ) {
-          items(shoppingLists) { list ->
-            ShoppingListCard(
-              list = list,
-              onClick = { onNavigateToAddList(list.id) },
-              onDelete = { viewModel.deleteList(list) }
-            )
-          }
+            if (currentOrder == SortOrder.BY_DAY) {
+                val grouped = shoppingLists.groupBy { it.assignedDay ?: "Sin asignar" }
+                val daysOrder = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo", "Sin asignar")
+                val sortedGroups = grouped.entries.sortedBy { daysOrder.indexOf(it.key) }
+                
+                sortedGroups.forEach { (day, lists) ->
+                    item {
+                        Text(
+                            text = day,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Lissu_Purple,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
+                    items(lists) { list ->
+                        ShoppingListCard(
+                            list = list,
+                            onClick = { onNavigateToAddList(list.id) },
+                            onDelete = { viewModel.deleteList(list) }
+                        )
+                    }
+                }
+            } else {
+                items(shoppingLists) { list ->
+                    ShoppingListCard(
+                        list = list,
+                        onClick = { onNavigateToAddList(list.id) },
+                        onDelete = { viewModel.deleteList(list) }
+                    )
+                }
+            }
         }
       }
 
@@ -256,7 +289,7 @@ fun ShoppingListCard(
 
   Surface(
     color = containerColor,
-    shape = RoundedCornerShape(24.dp),
+    shape = RoundedCornerShape(12.dp),
     modifier = Modifier
       .fillMaxWidth()
       .clickable { onClick() }
@@ -275,7 +308,7 @@ fun ShoppingListCard(
           color = contentColor
         )
         Text(
-          text = "${list.items.size} artículos",
+          text = if (list.assignedDay != null) "${list.assignedDay} • ${list.items.size} art." else "${list.items.size} artículos",
           fontSize = 12.sp,
           color = contentColor.copy(alpha = 0.7f),
           fontWeight = FontWeight.Medium

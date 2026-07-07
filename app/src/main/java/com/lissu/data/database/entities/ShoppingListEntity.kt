@@ -8,13 +8,15 @@ import com.lissu.data.models.ShoppingList
 data class ShoppingListEntity(
     @PrimaryKey
     val id: String,
-    val name: String
+    val name: String,
+    val assignedDay: String? = null
 )
 
 fun ShoppingListEntity.toModel(): ShoppingList {
     return ShoppingList(
         id = id,
         name = name,
+        assignedDay = assignedDay,
         items = emptyList()
     )
 }
@@ -22,6 +24,7 @@ fun ShoppingListEntity.toModel(): ShoppingList {
 fun ShoppingList.toEntity(): ShoppingListEntity {
     return ShoppingListEntity(
         id = id,
-        name = name
+        name = name,
+        assignedDay = assignedDay
     )
 }
