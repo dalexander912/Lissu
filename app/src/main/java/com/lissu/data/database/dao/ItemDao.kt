@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import com.lissu.data.database.entities.ItemEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -13,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
 interface ItemDao {
     @Query("SELECT * FROM items WHERE listId = :listId")
     fun getItemsByListId(listId: String): Flow<List<ItemEntity>>
+
+    @Upsert
+    suspend fun upsertItem(item: ItemEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(item: ItemEntity)

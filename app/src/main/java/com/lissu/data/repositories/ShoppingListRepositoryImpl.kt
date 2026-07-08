@@ -25,7 +25,7 @@ class ShoppingListRepositoryImpl(
     }
 
     override suspend fun insertShoppingList(shoppingList: ShoppingList) {
-        shoppingListDao.insertShoppingList(shoppingList.toEntity())
+        shoppingListDao.upsertShoppingList(shoppingList.toEntity())
     }
 
     override suspend fun deleteShoppingList(shoppingList: ShoppingList) {
@@ -33,11 +33,11 @@ class ShoppingListRepositoryImpl(
     }
 
     override suspend fun addItemToList(listId: String, item: Item) {
-        itemDao.insertItem(item.toEntity(listId))
+        itemDao.upsertItem(item.toEntity(listId))
     }
 
     override suspend fun updateItem(item: Item, listId: String) {
-        itemDao.updateItem(item.toEntity(listId))
+        itemDao.upsertItem(item.toEntity(listId))
     }
 
     override suspend fun deleteItem(item: Item, listId: String) {

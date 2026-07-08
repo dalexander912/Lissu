@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import com.lissu.data.database.entities.ShoppingListEntity
 import com.lissu.data.database.relations.ShoppingListWithItems
 import kotlinx.coroutines.flow.Flow
@@ -24,8 +25,11 @@ interface ShoppingListDao {
     @Query("SELECT * FROM shopping_lists WHERE id = :listId")
     fun getShoppingListWithItemsById(listId: String): Flow<ShoppingListWithItems?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertShoppingList(shoppingList: ShoppingListEntity)
+    @Upsert
+    suspend fun upsertShoppingList(shoppingList: ShoppingListEntity)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertShoppingList(shoppingList: ShoppingListEntity): Long
 
     @Update
     suspend fun updateShoppingList(shoppingList: ShoppingListEntity)
