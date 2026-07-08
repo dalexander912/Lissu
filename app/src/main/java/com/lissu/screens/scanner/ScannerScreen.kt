@@ -144,16 +144,10 @@ fun ScannerScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        OutlinedTextField(
-                            value = item.category ?: "",
-                            onValueChange = viewModel::onCategoryChange,
-                            label = { Text("Categoría") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
                         Button(
                             onClick = viewModel::onShowListSelector,
                             modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                         ) {
                             Text("Añadir a lista")
                         }

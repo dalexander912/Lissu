@@ -243,7 +243,7 @@ fun HomeScreen(
               contentDescription = "Producto",
               modifier = Modifier.size(32.dp)
             )
-            Text("Agregar producto", fontSize = 12.sp)
+            Text("Crear lista", fontSize = 12.sp)
           }
         }
       }

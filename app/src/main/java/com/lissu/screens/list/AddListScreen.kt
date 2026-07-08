@@ -103,7 +103,7 @@ fun AddListScreen(
                 Column(modifier = Modifier.padding(20.dp)) {
                     TextField(
                         value = viewModel.listName,
-                        onValueChange = { viewModel.listName = it },
+                        onValueChange = { viewModel.updateListName(it) },
                         modifier = Modifier
                             .fillMaxWidth(),
                         textStyle = LocalTextStyle.current.copy(

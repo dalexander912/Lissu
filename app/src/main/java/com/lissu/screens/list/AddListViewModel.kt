@@ -23,8 +23,11 @@ class AddListViewModel(
     private val shoppingListRepository: ShoppingListRepository
 ) : ViewModel() {
     var listId by mutableStateOf<String?>(null)
+        private set
     var listName by mutableStateOf("Nueva Lista")
+        private set
     var assignedDay by mutableStateOf<String?>(null)
+        private set
     val items = mutableStateListOf<Item>()
 
     private val _uiEvent = Channel<UiEvent>()
@@ -36,18 +39,19 @@ class AddListViewModel(
     }
 
     fun loadList(id: String?) {
-        if (id == null) {
-            listId = null
-            listName = "Nueva Lista"
-            assignedDay = null
-            items.clear()
-            return
-        }
-
-
-        listId = id
-
         viewModelScope.launch {
+            if (id == null) {
+                val newId = UUID.randomUUID().toString()
+                listId = newId
+                listName = "Nueva Lista"
+                assignedDay = null
+                items.clear()
+                // Crear la lista inicial en la DB
+                autoSave()
+                return@launch
+            }
+
+            listId = id
             // Obtener la lista con sus items en la DB
             val list = shoppingListRepository.getShoppingListById(id).first()
             list?.let {
@@ -59,71 +63,71 @@ class AddListViewModel(
         }
     }
 
+    fun updateListName(newName: String) {
+        listName = newName
+        autoSave()
+    }
+
+    fun updateAssignedDay(day: String?) {
+        assignedDay = day
+        autoSave()
+    }
+
+    private fun autoSave() {
+        val currentId = listId ?: return
+        viewModelScope.launch {
+            val shoppingList = ShoppingList(
+                id = currentId,
+                name = listName,
+                assignedDay = assignedDay
+            )
+            shoppingListRepository.insertShoppingList(shoppingList)
+        }
+    }
+
     fun addItem(name: String) {
         if (name.isNotBlank()) {
+            val lid = listId ?: return
             val newItem = Item(id = UUID.randomUUID().toString(), name = name)
             items.add(newItem)
 
-            // Si la lista ya existe en la DB, guardamos el item
-            listId?.let { lid ->
-                viewModelScope.launch {
-                    shoppingListRepository.addItemToList(lid, newItem)
-                }
+            viewModelScope.launch {
+                shoppingListRepository.addItemToList(lid, newItem)
             }
         }
     }
 
     fun toggleItem(id: String) {
+        val lid = listId ?: return
         val index = items.indexOfFirst { it.id == id }
         if (index != -1) {
             val item = items[index]
             val updatedItem = item.copy(isChecked = !item.isChecked)
             items[index] = updatedItem
 
-            // Actualizar en DB si la lista existe
-            listId?.let { lid ->
-                viewModelScope.launch {
-                    shoppingListRepository.updateItem(updatedItem, lid)
-                }
+            viewModelScope.launch {
+                shoppingListRepository.updateItem(updatedItem, lid)
             }
         }
     }
 
     fun removeItem(id: String) {
+        val lid = listId ?: return
         val itemToRemove = items.find { it.id == id }
         items.removeIf { it.id == id }
 
-        listId?.let { lid ->
-            itemToRemove?.let { item ->
-                viewModelScope.launch {
-                    shoppingListRepository.deleteItem(item, lid)
-                }
+        itemToRemove?.let { item ->
+            viewModelScope.launch {
+                shoppingListRepository.deleteItem(item, lid)
             }
         }
     }
 
     fun saveList() {
-        val currentId = listId ?: UUID.randomUUID().toString()
-        listId = currentId
-
-        val shoppingList = ShoppingList(
-            id = currentId,
-            name = listName,
-            assignedDay = assignedDay
-        )
-
+        autoSave()
         viewModelScope.launch {
-            shoppingListRepository.insertShoppingList(shoppingList)
-            // Guarda todos los items actuales
-            items.forEach { item ->
-                shoppingListRepository.addItemToList(currentId, item)
-            }
             _uiEvent.send(UiEvent.SaveSuccess)
         }
-    }
-
-    fun updateAssignedDay(day: String?) {
-        assignedDay = day
     }
 
     companion object {
