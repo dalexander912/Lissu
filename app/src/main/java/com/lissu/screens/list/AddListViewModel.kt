@@ -24,7 +24,7 @@ class AddListViewModel(
 ) : ViewModel() {
     var listId by mutableStateOf<String?>(null)
         private set
-    var listName by mutableStateOf("Nueva Lista")
+    var listName by mutableStateOf("")
         private set
     var assignedDay by mutableStateOf<String?>(null)
         private set
@@ -41,18 +41,14 @@ class AddListViewModel(
     fun loadList(id: String?) {
         viewModelScope.launch {
             if (id == null) {
-                val newId = UUID.randomUUID().toString()
-                listId = newId
-                listName = "Nueva Lista"
+                listId = UUID.randomUUID().toString()
+                listName = ""
                 assignedDay = null
                 items.clear()
-                // Crear la lista inicial en la DB
-                autoSave()
                 return@launch
             }
 
             listId = id
-            // Obtener la lista con sus items en la DB
             val list = shoppingListRepository.getShoppingListById(id).first()
             list?.let {
                 listName = it.name
@@ -65,7 +61,9 @@ class AddListViewModel(
 
     fun updateListName(newName: String) {
         listName = newName
-        autoSave()
+        if (newName.isNotBlank() || items.isNotEmpty()) {
+            autoSave()
+        }
     }
 
     fun updateAssignedDay(day: String?) {
@@ -75,10 +73,13 @@ class AddListViewModel(
 
     private fun autoSave() {
         val currentId = listId ?: return
+
+        if (listName.isBlank() && items.isEmpty()) return
+
         viewModelScope.launch {
             val shoppingList = ShoppingList(
                 id = currentId,
-                name = listName,
+                name = if (listName.isBlank()) "Nueva Lista" else listName,
                 assignedDay = assignedDay
             )
             shoppingListRepository.insertShoppingList(shoppingList)
@@ -89,9 +90,18 @@ class AddListViewModel(
         if (name.isNotBlank()) {
             val lid = listId ?: return
             val newItem = Item(id = UUID.randomUUID().toString(), name = name)
+            
             items.add(newItem)
 
             viewModelScope.launch {
+
+                val shoppingList = ShoppingList(
+                    id = lid,
+                    name = if (listName.isBlank()) "Nueva Lista" else listName,
+                    assignedDay = assignedDay
+                )
+                shoppingListRepository.insertShoppingList(shoppingList)
+                
                 shoppingListRepository.addItemToList(lid, newItem)
             }
         }
@@ -124,6 +134,13 @@ class AddListViewModel(
     }
 
     fun saveList() {
+        if (listName.isBlank() && items.isEmpty()) {
+            viewModelScope.launch {
+                _uiEvent.send(UiEvent.ShowSnackbar("Añade un nombre o productos primero"))
+            }
+            return
+        }
+
         autoSave()
         viewModelScope.launch {
             _uiEvent.send(UiEvent.SaveSuccess)
